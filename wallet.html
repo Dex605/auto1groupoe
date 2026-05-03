@@ -55,6 +55,25 @@
     <div class="wallet-hero-sub">Deposited amount + profits earned</div>
   </div>
 
+  <!-- Welcome Bonus Card -->
+  <div id="bonusCard" style="background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(201,168,76,.04));border:1px solid rgba(201,168,76,.35);border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1.25rem;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
+      <div style="display:flex;align-items:center;gap:.6rem;">
+        <span style="font-size:1.2rem;">🎁</span>
+        <strong style="color:var(--gold);font-size:.95rem;">Welcome Bonus</strong>
+      </div>
+      <span style="font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--gold);" id="bonusAmount">$80.00</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:.78rem;color:var(--text-muted);margin-bottom:.4rem;">
+      <span>Cars Matched Today</span>
+      <span id="bonusMatchText">0 / 40</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bonusMatchBar" style="width:0%;"></div>
+    </div>
+    <p style="font-size:.75rem;color:var(--text-muted);margin-top:.6rem;" id="bonusStatusText">Your welcome bonus is active. Keep matching to earn commissions.</p>
+  </div>
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:1.25rem;">
     <div class="stat-card" style="text-align:center;">
       <div class="stat-label">Commission</div>
@@ -162,6 +181,26 @@ function loadWallet(){
   document.getElementById('walletAmount').textContent = formatMoney(u.wallet||0);
   document.getElementById('commAmount').textContent = formatMoney(u.commission||0);
   document.getElementById('earnAmount').textContent = formatMoney(u.earnings||0);
+
+  // Match progress
+  const matched = u.matchCount || 0;
+  const pct = Math.round((matched / 40) * 100);
+  document.getElementById('bonusMatchText').textContent = matched + ' / 40';
+  document.getElementById('bonusMatchBar').style.width = pct + '%';
+
+  // Bonus status text
+  const statusEl = document.getElementById('bonusStatusText');
+  if(u.hasDeposited){
+    statusEl.textContent = 'You have made a deposit. Full access to all 40 matches unlocked.';
+    statusEl.style.color = 'var(--success)';
+  } else if(matched >= 33){
+    statusEl.textContent = 'Welcome bonus exhausted. Deposit $50 to continue matching cars 34–40.';
+    statusEl.style.color = 'var(--danger)';
+  } else {
+    const remaining = 33 - matched;
+    statusEl.textContent = `Welcome bonus active — ${remaining} bonus match${remaining===1?'':'es'} remaining before deposit required.`;
+  }
+
   const txs = Store.get('a1g_transactions')||[];
   if(txs.length){
     document.getElementById('txList').innerHTML = txs.slice().reverse().map(tx=>`
