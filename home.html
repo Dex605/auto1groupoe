@@ -350,7 +350,6 @@ function updateMatchUI(){
 function doMatch(){
   if(matchCount >= MAX_MATCH){ showToast('You have completed all 40 matches today! 🎉'); return; }
   const u = getUser();
-  // Block only if past bonus limit AND no deposit made
   if(matchCount >= BONUS_MATCH_LIMIT && !u.hasDeposited){
     showToast('Please deposit $50 to continue matching.');
     window.location.href = 'wallet.html';
@@ -370,29 +369,27 @@ function doMatch(){
   showToast('Match successful! +$'+earn.toFixed(2)+' commission 🚗');
   nextSlide();
 }
+
+function checkDepositGate(){
   const u = getUser();
   const gate = document.getElementById('depositGate');
   const banner = document.getElementById('bonusBanner');
   const btn = document.getElementById('matchBtn');
-  // Show bonus banner only while bonus matches remain
   if(matchCount < BONUS_MATCH_LIMIT){
     banner.style.display = 'block';
     gate.style.display = 'none';
     btn.disabled = false;
     btn.style.opacity = '1';
-    // update bonus progress
     const pct = Math.round((matchCount/BONUS_MATCH_LIMIT)*100);
     document.getElementById('bonusBar').style.width = pct+'%';
     document.getElementById('bonusUsedText').textContent = matchCount+' / '+BONUS_MATCH_LIMIT;
-  } else if(matchCount >= BONUS_MATCH_LIMIT && !(u.hasDeposited)){
-    // Bonus exhausted, no deposit yet — show gate
+  } else if(!u.hasDeposited){
     banner.style.display = 'none';
     gate.style.display = 'block';
     btn.disabled = true;
     btn.style.opacity = '0.4';
     btn.textContent = '🔒 Deposit $50 to Continue';
   } else {
-    // Has deposited — hide both, allow matching
     banner.style.display = 'none';
     gate.style.display = 'none';
     btn.disabled = false;
