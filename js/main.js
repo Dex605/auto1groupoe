@@ -93,3 +93,4 @@ const CARS = [
   { id:39, name:'Range Rover Sport Drive',  cat:'Luxury SUV',        img:'/auto1groupoe/images/cars/car39.jpg', price:'$115,000',  rating:4.8 },
   { id:40, name:'BMW 4 Series NYC',         cat:'Sports Coupe',      img:'/auto1groupoe/images/cars/car40.jpg', price:'$58,000',   rating:4.8 },
 ];
+/* updated */
