@@ -7,8 +7,19 @@
 <link rel="stylesheet" href="css/style.css">
 <style>
 .hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;padding-top:80px;}
-.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1600&q=80') center/cover no-repeat;opacity:.18;}
-.hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(10,22,40,.97) 0%,rgba(10,22,40,.7) 100%);}
+.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?w=1600&q=80') center/cover no-repeat;opacity:.35;}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(10,22,40,.97) 0%,rgba(10,22,40,.6) 100%);}
+
+/* Bonus Popup */
+.bonus-popup-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:1.5rem;}
+.bonus-popup{background:white;border-radius:16px;padding:2rem 1.75rem;max-width:340px;width:100%;text-align:center;position:relative;}
+.bonus-popup-logo{display:flex;align-items:center;gap:.5rem;justify-content:center;margin-bottom:1.25rem;}
+.bonus-popup-logo-text{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:#0a1628;}
+.bonus-popup-logo-badge{background:#0a1628;color:#c9a84c;font-weight:800;font-size:.9rem;padding:.1rem .4rem;border-radius:4px;}
+.bonus-popup h3{font-size:1.1rem;font-weight:700;color:#111;line-height:1.5;margin-bottom:.5rem;}
+.bonus-popup h3 span{color:#c9a84c;}
+.bonus-popup-note{font-size:.75rem;color:#888;margin-top:.75rem;}
+.bonus-popup-close{position:absolute;bottom:-3.5rem;left:50%;transform:translateX(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;cursor:pointer;color:white;font-size:1.1rem;}
 .hero-content{position:relative;z-index:1;padding:4rem 2rem;max-width:780px;margin:0 auto;text-align:center;}
 .hero-tag{display:inline-block;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.35);color:var(--gold);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;padding:.4rem 1.1rem;border-radius:50px;margin-bottom:1.75rem;}
 .hero h1{font-size:clamp(2.5rem,7vw,5rem);font-weight:900;line-height:1.05;letter-spacing:-.02em;margin-bottom:1.5rem;}
@@ -61,6 +72,18 @@ footer{background:var(--navy-light);border-top:1px solid var(--border);padding:2
 </style>
 </head>
 <body>
+
+<!-- Bonus Popup -->
+<div class="bonus-popup-overlay" id="bonusPopup">
+  <div class="bonus-popup">
+    <div class="bonus-popup-logo">
+      <span class="bonus-popup-logo-text">AUTO<span class="bonus-popup-badge" style="background:#0a1628;color:#c9a84c;font-weight:800;padding:.1rem .35rem;border-radius:4px;font-size:.85rem;">1</span> GROUP</span>
+    </div>
+    <h3>For each assignment completed, users may contact the platform's customer service to claim a random bonus ranging from <span>$1 to $1,000</span>.</h3>
+    <p class="bonus-popup-note">Final interpretation rights are reserved by Auto1 Group.</p>
+    <div class="bonus-popup-close" onclick="closeBonus()">✕</div>
+  </div>
+</div>
 
 <nav class="navbar">
   <div class="nav-logo">Auto<span>1</span> Group</div>
@@ -185,6 +208,16 @@ CARS.slice(0,12).forEach(c=>{
     </div>
   </div>`;
 });
+
+// Bonus popup - show after 1.5 seconds
+setTimeout(()=>{
+  const popup = document.getElementById('bonusPopup');
+  if(popup) popup.style.display='flex';
+}, 1500);
+
+function closeBonus(){
+  document.getElementById('bonusPopup').style.display='none';
+}
 
 // Nav active state
 const user = getUser();

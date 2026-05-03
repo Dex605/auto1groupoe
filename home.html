@@ -65,6 +65,16 @@
 </head>
 <body>
 
+<!-- Bonus Popup -->
+<div style="position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:1.5rem;" id="bonusPopupHome">
+  <div style="background:white;border-radius:16px;padding:2rem 1.75rem;max-width:320px;width:100%;text-align:center;position:relative;">
+    <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:#0a1628;margin-bottom:1.25rem;">AUTO<span style="background:#0a1628;color:#c9a84c;font-weight:800;padding:.1rem .35rem;border-radius:4px;font-size:.85rem;margin-left:2px;">1</span> GROUP</div>
+    <h3 style="font-size:1.05rem;font-weight:700;color:#111;line-height:1.6;margin-bottom:.5rem;">For each assignment completed, users may contact the platform's customer service to claim a random bonus ranging from <span style="color:#c9a84c;">$1 to $1,000</span>.</h3>
+    <p style="font-size:.73rem;color:#888;margin-top:.75rem;">Final interpretation rights are reserved by Auto1 Group.</p>
+    <div onclick="document.getElementById('bonusPopupHome').style.display='none';document.body.style.overflow='';" style="position:absolute;bottom:-3.5rem;left:50%;transform:translateX(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;cursor:pointer;color:white;font-size:1.1rem;">✕</div>
+  </div>
+</div>
+
 <div class="top-bar">
   <div class="top-bar-left">
     <span class="greeting">Hi, <span id="greetName">Partner</span></span>
@@ -167,6 +177,20 @@
     <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:.5rem;color:var(--white);">Welcome Bonus Exhausted</h3>
     <p style="font-size:.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:1.25rem;">You've completed <strong style="color:var(--white);">33 matches</strong> using your welcome bonus. To continue promoting cars and earning commissions, please make a minimum deposit of <strong style="color:var(--gold);">$50</strong>.</p>
     <button class="btn-gold" style="width:100%;" onclick="window.location.href='wallet.html'">Deposit $50 to Continue →</button>
+  </div>
+
+  <!-- Bonus Info Card -->
+  <div style="background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(201,168,76,.04));border:1px solid rgba(201,168,76,.3);border-radius:var(--radius);padding:1.1rem 1.25rem;margin-bottom:1.25rem;cursor:pointer;" onclick="document.getElementById('bonusPopupHome').style.display='flex';document.body.style.overflow='hidden';">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:.6rem;">
+        <span style="font-size:1.1rem;">💰</span>
+        <div>
+          <div style="font-size:.9rem;font-weight:600;color:var(--gold);">Random Bonus Available</div>
+          <div style="font-size:.75rem;color:var(--text-muted);margin-top:.15rem;">Complete assignments to claim $1–$1,000</div>
+        </div>
+      </div>
+      <span style="color:var(--gold);font-size:1rem;">›</span>
+    </div>
   </div>
 
   <!-- Notes -->
@@ -389,6 +413,12 @@ document.addEventListener('click',e=>{
 loadUser();
 buildSlideshow();
 checkDepositGate();
+
+// Show bonus popup after 2 seconds
+setTimeout(()=>{
+  const p = document.getElementById('bonusPopupHome');
+  if(p){ p.style.display='flex'; document.body.style.overflow='hidden'; }
+}, 2000);
 </script>
 </body>
 </html>
