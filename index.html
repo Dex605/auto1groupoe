@@ -188,16 +188,18 @@ footer{background:var(--navy-light);border-top:1px solid var(--border);padding:2
 </footer>
 
 <script src="js/main.js"></script>
+<script>
 const tickerItems = ['Premium Car Promotions','Earn Daily Commissions','20% Referral Bonus','40+ Luxury Vehicles','Instant Withdrawals','Global Dealer Network','Transparent Earnings','24/7 Platform Access'];
 const t = document.getElementById('ticker');
 const doubled = [...tickerItems,...tickerItems];
 t.innerHTML = doubled.map(i=>`<span>${i}</span>`).join('');
 
 // Cars scroll
+const IMG_BASE = 'https://dex605.github.io/auto1groupoe/';
 const cs = document.getElementById('carsScroll');
 CARS.slice(0,12).forEach(c=>{
   cs.innerHTML += `<div class="car-card">
-    <img src="${c.img}" alt="${c.name}" loading="lazy">
+    <img src="${IMG_BASE}${c.img}" alt="${c.name}" loading="lazy">
     <div class="car-card-body">
       <div class="car-card-cat">${c.cat}</div>
       <div class="car-card-name">${c.name}</div>
