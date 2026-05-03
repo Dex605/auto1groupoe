@@ -163,9 +163,11 @@ document.getElementById('signupForm').addEventListener('submit', function(e) {
 
   setTimeout(()=>{
     const myCode = genReferral();
-    const user = { username, email, referral: myCode, referredBy: referral||null, wallet:0, commission:0, earnings:0, matchCount:0, round:1, joined: new Date().toISOString() };
+    const user = { username, email, referral: myCode, referredBy: referral||null, wallet: WELCOME_BONUS, commission:0, earnings:0, matchCount:0, round:1, bonusUsed: true, hasDeposited: false, joined: new Date().toISOString() };
     Store.set('a1g_user', user);
-    showToast('Account created! Welcome to Auto1 Group 🎉');
+    // Record bonus transaction
+    Store.set('a1g_transactions', [{ type:'deposit', label:'Welcome Bonus 🎁', amount: WELCOME_BONUS, date: new Date().toLocaleString() }]);
+    showToast('Account created! $80 welcome bonus credited 🎉');
     setTimeout(()=>{ window.location.href='home.html'; }, 1000);
   }, 1200);
 });

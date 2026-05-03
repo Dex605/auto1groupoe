@@ -191,6 +191,7 @@ function submitDeposit(){
 
   const u = getUser();
   u.wallet = (u.wallet||0) + amt;
+  u.hasDeposited = true;
   Store.set('a1g_user',u);
 
   const txs = Store.get('a1g_transactions')||[];
