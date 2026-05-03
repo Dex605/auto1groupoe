@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard — Auto1 Group</title>
 <link rel="stylesheet" href="css/style.css">
@@ -344,8 +345,7 @@ function goSlide(i){
 function nextSlide(){ goSlide((currentSlide+1)%CARS.length); }
 function prevSlide(){ goSlide((currentSlide-1+CARS.length)%CARS.length); }
 
-// Auto-advance every 4s
-setInterval(nextSlide, 4000);
+// Manual navigation only - no auto-advance to save memory
 
 function updateMatchUI(){
   const pct = Math.round((matchCount/MAX_MATCH)*100);
