@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<base href="https://dex605.github.io/auto1groupoe/">
 <title>Dashboard — Auto1 Group</title>
 <link rel="stylesheet" href="css/style.css">
 <style>
@@ -311,12 +310,14 @@ function loadUser(){
   updateMatchUI();
 }
 
+const IMG_BASE = 'https://dex605.github.io/auto1groupoe/';
+
 function buildSlideshow(){
   const tc = document.getElementById('thumbsContainer');
   CARS.forEach((c,i)=>{
     const d = document.createElement('div');
     d.className='thumb'+(i===0?' active':'');
-    d.innerHTML=`<img src="${c.img}" alt="${c.name}" loading="lazy">`;
+    d.innerHTML=`<img src="${IMG_BASE}${c.img}" alt="${c.name}" loading="lazy">`;
     d.onclick=()=>goSlide(i);
     tc.appendChild(d);
   });
@@ -328,7 +329,7 @@ function goSlide(i){
   const c = CARS[i];
   document.getElementById('mainImg').style.opacity='0';
   setTimeout(()=>{
-    document.getElementById('mainImg').src = c.img;
+    document.getElementById('mainImg').src = IMG_BASE + c.img;
     document.getElementById('mainImg').style.opacity='1';
     document.getElementById('mainCat').textContent = c.cat;
     document.getElementById('mainName').textContent = c.name;
@@ -337,7 +338,6 @@ function goSlide(i){
     document.getElementById('slideCounter').textContent = (i+1)+' / '+CARS.length;
   },200);
   document.querySelectorAll('.thumb').forEach((t,j)=>t.classList.toggle('active',j===i));
-  // scroll thumb into view
   const thumbs = document.querySelectorAll('.thumb');
   if(thumbs[i]) thumbs[i].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
 }
