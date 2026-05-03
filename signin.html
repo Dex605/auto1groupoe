@@ -49,10 +49,10 @@
 
     <form id="signinForm" novalidate>
       <div class="form-group">
-        <label class="form-label">Email Address</label>
+        <label class="form-label">Email Address or Username</label>
         <div class="input-icon">
-          <span class="icon">📧</span>
-          <input class="form-input" type="email" id="email" placeholder="your@email.com" autocomplete="email">
+          <span class="icon">👤</span>
+          <input class="form-input" type="text" id="email" placeholder="Email or username" autocomplete="username">
         </div>
       </div>
 
@@ -109,20 +109,22 @@ function sendReset(){
 
 document.getElementById('signinForm').addEventListener('submit',function(e){
   e.preventDefault();
-  const email = document.getElementById('email').value.trim();
+  const emailInput = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value;
-  if(!email||!password){ showToast('Please fill in all fields.'); return; }
+  if(!emailInput){ showToast('Please enter your email or username.'); return; }
+  if(!password){ showToast('Please enter your password.'); return; }
 
   const btn = document.getElementById('submitBtn');
   btn.textContent='Signing In...'; btn.disabled=true;
 
   setTimeout(()=>{
     const user = Store.get('a1g_user');
-    if(user && user.email===email){
+    // Match by email OR username, then check password
+    if(user && (user.email === emailInput || user.username === emailInput) && user.password === password){
       showToast('Welcome back, '+user.username+'! 🚗');
       setTimeout(()=>{ window.location.href='home.html'; },800);
     } else {
-      showToast('Invalid email or password. Please try again.');
+      showToast('Invalid email/username or password. Please try again.');
       btn.textContent='Sign In →'; btn.disabled=false;
     }
   },1000);
