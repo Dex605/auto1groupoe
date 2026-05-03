@@ -161,21 +161,6 @@
 
   <button class="btn-gold match-btn" id="matchBtn" onclick="doMatch()">MATCH (0/40)</button>
 
-  <!-- Welcome Bonus Banner -->
-  <div id="bonusBanner" style="background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.05));border:1px solid rgba(201,168,76,.4);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1.25rem;">
-    <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;">
-      <span style="font-size:1.2rem;">🎁</span>
-      <strong style="color:var(--gold);">Welcome Bonus Active — $80</strong>
-    </div>
-    <p style="font-size:.82rem;color:var(--text-muted);line-height:1.6;">Your welcome bonus covers the first <strong style="color:var(--white);">33 car matches</strong>. After that, a minimum deposit of <strong style="color:var(--gold);">$50</strong> is required to continue promoting and earning.</p>
-    <div style="margin-top:.75rem;">
-      <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--text-muted);margin-bottom:.3rem;">
-        <span>Bonus matches used</span><span id="bonusUsedText">0 / 33</span>
-      </div>
-      <div class="progress-bar"><div class="progress-fill" id="bonusBar" style="width:0%;"></div></div>
-    </div>
-  </div>
-
   <!-- Deposit Gate (hidden until match 33) -->
   <div id="depositGate" style="display:none;background:rgba(231,76,60,.08);border:1px solid rgba(231,76,60,.3);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.25rem;text-align:center;">
     <div style="font-size:1.8rem;margin-bottom:.5rem;">🔒</div>
@@ -373,24 +358,17 @@ function doMatch(){
 function checkDepositGate(){
   const u = getUser();
   const gate = document.getElementById('depositGate');
-  const banner = document.getElementById('bonusBanner');
   const btn = document.getElementById('matchBtn');
   if(matchCount < BONUS_MATCH_LIMIT){
-    banner.style.display = 'block';
     gate.style.display = 'none';
     btn.disabled = false;
     btn.style.opacity = '1';
-    const pct = Math.round((matchCount/BONUS_MATCH_LIMIT)*100);
-    document.getElementById('bonusBar').style.width = pct+'%';
-    document.getElementById('bonusUsedText').textContent = matchCount+' / '+BONUS_MATCH_LIMIT;
   } else if(!u.hasDeposited){
-    banner.style.display = 'none';
     gate.style.display = 'block';
     btn.disabled = true;
     btn.style.opacity = '0.4';
     btn.textContent = '🔒 Deposit $50 to Continue';
   } else {
-    banner.style.display = 'none';
     gate.style.display = 'none';
     btn.disabled = false;
     btn.style.opacity = '1';
