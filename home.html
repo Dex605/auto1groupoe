@@ -347,7 +347,29 @@ function updateMatchUI(){
   document.getElementById('matchBtn').textContent = 'MATCH ('+matchCount+'/'+MAX_MATCH+')';
 }
 
-function checkDepositGate(){
+function doMatch(){
+  if(matchCount >= MAX_MATCH){ showToast('You have completed all 40 matches today! 🎉'); return; }
+  const u = getUser();
+  // Block only if past bonus limit AND no deposit made
+  if(matchCount >= BONUS_MATCH_LIMIT && !u.hasDeposited){
+    showToast('Please deposit $50 to continue matching.');
+    window.location.href = 'wallet.html';
+    return;
+  }
+  matchCount++;
+  const earn = +(Math.random()*2+0.5).toFixed(2);
+  u.matchCount = matchCount;
+  u.commission = +(u.commission||0) + earn;
+  u.earnings = +(u.earnings||0) + earn;
+  Store.set('a1g_user', u);
+  updateMatchUI();
+  checkDepositGate();
+  document.getElementById('commVal').textContent = formatMoney(u.commission);
+  document.getElementById('earnVal').textContent = formatMoney(u.earnings);
+  document.getElementById('walletVal').textContent = formatMoney(u.wallet);
+  showToast('Match successful! +$'+earn.toFixed(2)+' commission 🚗');
+  nextSlide();
+}
   const u = getUser();
   const gate = document.getElementById('depositGate');
   const banner = document.getElementById('bonusBanner');
@@ -376,32 +398,6 @@ function checkDepositGate(){
     btn.disabled = false;
     btn.style.opacity = '1';
   }
-}
-
-function doMatch(){
-  if(matchCount >= MAX_MATCH){ showToast('You have completed all 40 matches today! 🎉'); return; }
-  const u = getUser();
-  // Check deposit gate
-  if(matchCount >= BONUS_MATCH_LIMIT && !u.hasDeposited){
-    showToast('Please deposit $50 to continue matching.');
-    window.location.href = 'wallet.html';
-    return;
-  }
-  matchCount++;
-  const earn = +(Math.random()*2+0.5).toFixed(2);
-  u.matchCount = matchCount;
-  u.commission = +(u.commission||0) + earn;
-  u.earnings = +(u.earnings||0) + earn;
-  // Deduct from wallet
-  u.wallet = Math.max(0, (u.wallet||0) - 0.1);
-  Store.set('a1g_user',u);
-  updateMatchUI();
-  checkDepositGate();
-  document.getElementById('commVal').textContent = formatMoney(u.commission);
-  document.getElementById('earnVal').textContent = formatMoney(u.earnings);
-  document.getElementById('walletVal').textContent = formatMoney(u.wallet);
-  showToast('Match successful! +$'+earn.toFixed(2)+' commission 🚗');
-  nextSlide();
 }
 
 function copyRef(){
