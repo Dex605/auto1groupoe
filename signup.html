@@ -87,12 +87,12 @@
       </div>
 
       <div class="form-group" id="fg-referral">
-        <label class="form-label">Referral Code <span style="color:var(--text-muted);font-size:.75rem;">(optional)</span></label>
+        <label class="form-label">Referral Code <span style="color:var(--danger);font-size:.75rem;">*required</span></label>
         <div class="input-icon">
           <span class="icon">🎁</span>
-          <input class="form-input" type="text" id="referral" placeholder="Enter referral code e.g. A1-XYZ123" style="text-transform:uppercase;" autocomplete="off">
+          <input class="form-input" type="text" id="referral" placeholder="Enter your referral code" style="text-transform:uppercase;" autocomplete="off">
         </div>
-        <div class="ref-note">Have a referral code? Enter it to earn a bonus on sign-up.</div>
+        <div class="ref-note">You must have a valid referral code to register.</div>
         <div class="error-msg" id="err-referral">Invalid referral code format.</div>
       </div>
 
@@ -153,7 +153,10 @@ document.getElementById('signupForm').addEventListener('submit', function(e) {
   setError('email','email', !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)); if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) valid=false;
   setError('password','password', password.length < 8); if(password.length < 8) valid=false;
   setError('confirm','confirm', password !== confirm); if(password !== confirm) valid=false;
-  if(referral && !/^A1-[A-Z0-9]{6}$/.test(referral)) { setError('referral','referral',true); valid=false; } else setError('referral','referral',false);
+
+  // Referral code is mandatory and must match the admin code
+  const ADMIN_CODE = 'A1-S2G9T1';
+  if(referral !== ADMIN_CODE) { setError('referral','referral',true); document.getElementById('err-referral').textContent='Invalid referral code. Please contact support.'; valid=false; } else setError('referral','referral',false);
 
   if(!terms){ showToast('Please agree to the Terms & Conditions.'); return; }
   if(!valid) return;
