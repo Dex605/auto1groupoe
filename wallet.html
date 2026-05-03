@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wallet — Auto1 Group</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.top-bar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.25rem;background:var(--navy-light);border-bottom:1px solid var(--border);}
+.page-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;}
+.back-btn{color:var(--gold);cursor:pointer;font-size:.9rem;}
+
+.wallet-hero{background:linear-gradient(135deg,var(--navy-mid),#0d2a52);border:1px solid var(--border);border-radius:var(--radius);padding:2rem 1.5rem;margin-bottom:1.25rem;text-align:center;}
+.wallet-hero-label{font-size:.78rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem;}
+.wallet-hero-amount{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:700;color:var(--gold);}
+.wallet-hero-sub{font-size:.82rem;color:var(--text-muted);margin-top:.4rem;}
+
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:1.25rem;}
+.action-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem 1rem;text-align:center;cursor:pointer;transition:border-color .3s,transform .2s;}
+.action-card:hover{border-color:var(--gold);transform:translateY(-2px);}
+.action-icon{font-size:1.8rem;margin-bottom:.6rem;}
+.action-name{font-weight:600;font-size:.95rem;margin-bottom:.3rem;}
+.action-desc{font-size:.75rem;color:var(--text-muted);}
+
+.tx-item{display:flex;align-items:center;justify-content:space-between;padding:.9rem 0;border-bottom:1px solid var(--border);}
+.tx-item:last-child{border-bottom:none;}
+.tx-left{display:flex;align-items:center;gap:.75rem;}
+.tx-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.tx-icon.deposit{background:rgba(46,204,113,.15);}
+.tx-icon.withdraw{background:rgba(231,76,60,.15);}
+.tx-icon.commission{background:rgba(201,168,76,.15);}
+.tx-name{font-size:.9rem;font-weight:500;}
+.tx-date{font-size:.75rem;color:var(--text-muted);margin-top:.15rem;}
+.tx-amount{font-weight:600;font-size:.95rem;}
+.tx-amount.positive{color:var(--success);}
+.tx-amount.negative{color:var(--danger);}
+
+.input-row{display:flex;gap:.75rem;}
+.input-row .form-input{flex:1;}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="back-btn" onclick="history.back()">← Back</span>
+  <span class="page-title">My Wallet</span>
+  <div style="width:60px;"></div>
+</div>
+
+<div style="padding:70px 1.25rem 90px;">
+
+  <div class="wallet-hero">
+    <div class="wallet-hero-label">Total Wallet Balance</div>
+    <div class="wallet-hero-amount" id="walletAmount">$0.00</div>
+    <div class="wallet-hero-sub">Deposited amount + profits earned</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:1.25rem;">
+    <div class="stat-card" style="text-align:center;">
+      <div class="stat-label">Commission</div>
+      <div class="stat-value" id="commAmount">$0.00</div>
+    </div>
+    <div class="stat-card" style="text-align:center;">
+      <div class="stat-label">Total Earnings</div>
+      <div class="stat-value" id="earnAmount">$0.00</div>
+    </div>
+  </div>
+
+  <div class="action-grid">
+    <div class="action-card" onclick="openPanel('depositPanel')">
+      <div class="action-icon">💳</div>
+      <div class="action-name">Deposit</div>
+      <div class="action-desc">Add funds to your wallet</div>
+    </div>
+    <div class="action-card" onclick="openPanel('withdrawPanel')">
+      <div class="action-icon">🏦</div>
+      <div class="action-name">Withdraw</div>
+      <div class="action-desc">Transfer to your account</div>
+    </div>
+  </div>
+
+  <!-- Transaction History -->
+  <div class="section-label">Transaction History</div>
+  <div class="card" id="txList">
+    <div style="text-align:center;padding:2rem;color:var(--text-muted);font-size:.9rem;">No transactions yet. Make your first deposit to get started.</div>
+  </div>
+
+</div>
+
+<nav class="bottom-nav">
+  <a href="home.html"><span class="bn-icon">🏠</span>Home</a>
+  <a href="wallet.html" class="active"><span class="bn-icon">💰</span>Wallet</a>
+  <a href="incentives.html"><span class="bn-icon">🎁</span>Incentives</a>
+  <a href="profile.html"><span class="bn-icon">👤</span>Profile</a>
+</nav>
+
+<!-- DEPOSIT PANEL -->
+<div class="panel-overlay" id="depositPanel">
+  <div class="panel">
+    <div class="panel-header"><span class="panel-title">Deposit Funds</span><button class="panel-close" onclick="closePanel('depositPanel')">✕</button></div>
+    <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:1.5rem;">Contact support to verify your campaign account before depositing. Send your payment receipt after transfer.</p>
+    <div class="form-group">
+      <label class="form-label">Deposit Amount ($)</label>
+      <input class="form-input" type="number" id="depositAmt" placeholder="Enter amount e.g. 100" min="10">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Payment Method</label>
+      <select class="form-input" id="depositMethod">
+        <option value="">Select method</option>
+        <option>M-Pesa</option>
+        <option>Bank Transfer</option>
+        <option>USDT (TRC20)</option>
+        <option>Bitcoin</option>
+        <option>PayPal</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Transaction Reference / Receipt No.</label>
+      <input class="form-input" type="text" id="depositRef" placeholder="e.g. QHJ8KL92M">
+    </div>
+    <div style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:var(--radius-sm);padding:1rem;margin-bottom:1.25rem;font-size:.82rem;color:var(--text-muted);line-height:1.6;">
+      ⚠️ Please contact support to get the correct account details before sending funds. Deposits not confirmed with support may not be processed.
+    </div>
+    <button class="btn-gold" style="width:100%;" onclick="submitDeposit()">Submit Deposit Request</button>
+  </div>
+</div>
+
+<!-- WITHDRAW PANEL -->
+<div class="panel-overlay" id="withdrawPanel">
+  <div class="panel">
+    <div class="panel-header"><span class="panel-title">Withdraw Funds</span><button class="panel-close" onclick="closePanel('withdrawPanel')">✕</button></div>
+    <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:1.5rem;">Standard withdrawal processing hours: 9:00 AM – 10:00 PM EAT. Minimum withdrawal: $10.</p>
+    <div class="form-group">
+      <label class="form-label">Withdraw Amount ($)</label>
+      <input class="form-input" type="number" id="withdrawAmt" placeholder="Min $10" min="10">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Withdrawal Method</label>
+      <select class="form-input" id="withdrawMethod">
+        <option value="">Select method</option>
+        <option>M-Pesa</option>
+        <option>Bank Transfer</option>
+        <option>USDT (TRC20)</option>
+        <option>Bitcoin</option>
+        <option>PayPal</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Account / Phone Number</label>
+      <input class="form-input" type="text" id="withdrawAccount" placeholder="Your payment account">
+    </div>
+    <button class="btn-gold" style="width:100%;" onclick="submitWithdraw()">Request Withdrawal</button>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+requireAuth();
+
+function loadWallet(){
+  const u = getUser();
+  document.getElementById('walletAmount').textContent = formatMoney(u.wallet||0);
+  document.getElementById('commAmount').textContent = formatMoney(u.commission||0);
+  document.getElementById('earnAmount').textContent = formatMoney(u.earnings||0);
+  const txs = Store.get('a1g_transactions')||[];
+  if(txs.length){
+    document.getElementById('txList').innerHTML = txs.slice().reverse().map(tx=>`
+      <div class="tx-item">
+        <div class="tx-left">
+          <div class="tx-icon ${tx.type}">
+            ${tx.type==='deposit'?'💳':tx.type==='withdraw'?'🏦':'🚗'}
+          </div>
+          <div>
+            <div class="tx-name">${tx.label}</div>
+            <div class="tx-date">${tx.date}</div>
+          </div>
+        </div>
+        <div class="tx-amount ${tx.amount>0?'positive':'negative'}">${tx.amount>0?'+':''}${formatMoney(tx.amount)}</div>
+      </div>
+    `).join('');
+  }
+}
+
+function submitDeposit(){
+  const amt = parseFloat(document.getElementById('depositAmt').value);
+  const method = document.getElementById('depositMethod').value;
+  const ref = document.getElementById('depositRef').value.trim();
+  if(!amt||amt<10){ showToast('Minimum deposit is $10.'); return; }
+  if(!method){ showToast('Please select a payment method.'); return; }
+  if(!ref){ showToast('Please enter your transaction reference.'); return; }
+
+  const u = getUser();
+  u.wallet = (u.wallet||0) + amt;
+  Store.set('a1g_user',u);
+
+  const txs = Store.get('a1g_transactions')||[];
+  txs.push({ type:'deposit', label:'Deposit via '+method, amount:amt, date: new Date().toLocaleString(), ref });
+  Store.set('a1g_transactions',txs);
+
+  closePanel('depositPanel');
+  showToast('Deposit of '+formatMoney(amt)+' submitted! ✅');
+  loadWallet();
+}
+
+function submitWithdraw(){
+  const amt = parseFloat(document.getElementById('withdrawAmt').value);
+  const method = document.getElementById('withdrawMethod').value;
+  const acc = document.getElementById('withdrawAccount').value.trim();
+  if(!amt||amt<10){ showToast('Minimum withdrawal is $10.'); return; }
+  if(!method){ showToast('Please select a withdrawal method.'); return; }
+  if(!acc){ showToast('Please enter your account details.'); return; }
+
+  const u = getUser();
+  if((u.wallet||0) < amt){ showToast('Insufficient wallet balance.'); return; }
+  u.wallet = (u.wallet||0) - amt;
+  u.pending = (u.pending||0) + amt;
+  Store.set('a1g_user',u);
+
+  const txs = Store.get('a1g_transactions')||[];
+  txs.push({ type:'withdraw', label:'Withdrawal via '+method, amount:-amt, date: new Date().toLocaleString() });
+  Store.set('a1g_transactions',txs);
+
+  closePanel('withdrawPanel');
+  showToast('Withdrawal request submitted! Processing in 24–48hrs.');
+  loadWallet();
+}
+
+loadWallet();
+</script>
+</body>
+</html>

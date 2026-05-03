@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Incentives — Auto1 Group</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.top-bar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.25rem;background:var(--navy-light);border-bottom:1px solid var(--border);}
+.page-title{font-family:'Playfair Display',serif;font-size:1.2rem;}
+.back-btn{color:var(--gold);cursor:pointer;font-size:.9rem;}
+
+.tier-card{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1rem;}
+.tier-header{padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;}
+.tier-name{font-family:'Playfair Display',serif;font-size:1.15rem;}
+.tier-badge{font-size:.75rem;font-weight:600;padding:.3rem .85rem;border-radius:50px;}
+.tier-body{padding:1.25rem 1.5rem;border-top:1px solid var(--border);}
+.tier-feature{display:flex;align-items:center;gap:.6rem;font-size:.88rem;margin-bottom:.65rem;color:var(--text-light);}
+.tier-feature::before{content:'✓';color:var(--gold);font-weight:700;}
+.tier-price{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;margin-bottom:.25rem;}
+.tier-period{font-size:.8rem;color:var(--text-muted);}
+
+.ref-section{background:linear-gradient(135deg,var(--navy-mid),#0d2a52);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.25rem;}
+.ref-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-top:1.25rem;}
+.ref-stat{text-align:center;}
+.ref-stat-num{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold);}
+.ref-stat-label{font-size:.7rem;color:var(--text-muted);margin-top:.2rem;}
+
+.level-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem;margin-bottom:.75rem;display:flex;align-items:center;justify-content:space-between;}
+.level-left{display:flex;align-items:center;gap:.75rem;}
+.level-badge{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:var(--navy);}
+.level-name{font-size:.9rem;font-weight:500;}
+.level-desc{font-size:.75rem;color:var(--text-muted);}
+.level-pct{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold);font-weight:700;}
+
+/* Active tier highlight */
+.tier-card.active-tier{border-color:var(--gold);}
+.tier-card.active-tier .tier-header{background:rgba(201,168,76,.08);}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="back-btn" onclick="history.back()">← Back</span>
+  <span class="page-title">Incentives</span>
+  <div style="width:60px;"></div>
+</div>
+
+<div style="padding:70px 1.25rem 90px;">
+
+  <!-- Referral Summary -->
+  <div class="ref-section">
+    <div class="section-label" style="margin-bottom:.25rem;">Your Referral Program</div>
+    <div style="font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:.5rem;">Invite & Earn</div>
+    <p style="font-size:.85rem;color:var(--text-muted);line-height:1.6;">Earn commissions every time someone joins using your referral code and starts promoting cars. Build a downline and earn from multiple levels.</p>
+    <div style="margin-top:1rem;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:var(--radius-sm);padding:.85rem 1rem;display:flex;align-items:center;justify-content:space-between;">
+      <span style="font-family:monospace;font-size:1.05rem;color:var(--gold);letter-spacing:.1em;" id="refCode">—</span>
+      <button class="btn-gold" style="padding:.4rem 1rem;font-size:.8rem;" onclick="copyRef()">Copy Code</button>
+    </div>
+    <div class="ref-stats">
+      <div class="ref-stat"><div class="ref-stat-num" id="refCount">0</div><div class="ref-stat-label">Referrals</div></div>
+      <div class="ref-stat"><div class="ref-stat-num" id="refEarn">$0</div><div class="ref-stat-label">Ref. Earned</div></div>
+      <div class="ref-stat"><div class="ref-stat-num">20%</div><div class="ref-stat-label">Commission</div></div>
+    </div>
+  </div>
+
+  <!-- Downline Levels -->
+  <div class="section-label">Referral Commission Levels</div>
+  <div class="level-card">
+    <div class="level-left">
+      <div class="level-badge" style="background:linear-gradient(135deg,var(--gold),var(--gold-light));">L1</div>
+      <div><div class="level-name">Direct Referrals</div><div class="level-desc">People you invite directly</div></div>
+    </div>
+    <div class="level-pct">20%</div>
+  </div>
+  <div class="level-card">
+    <div class="level-left">
+      <div class="level-badge" style="background:linear-gradient(135deg,#7f8c8d,#bdc3c7);">L2</div>
+      <div><div class="level-name">2nd Level</div><div class="level-desc">Referrals of your referrals</div></div>
+    </div>
+    <div class="level-pct">10%</div>
+  </div>
+  <div class="level-card">
+    <div class="level-left">
+      <div class="level-badge" style="background:linear-gradient(135deg,#cd7f32,#e8a77a);">L3</div>
+      <div><div class="level-name">3rd Level</div><div class="level-desc">Extended downline</div></div>
+    </div>
+    <div class="level-pct">5%</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Promoter Tiers -->
+  <div class="section-label">Promoter Membership Tiers</div>
+
+  <div class="tier-card active-tier">
+    <div class="tier-header">
+      <div><div class="tier-name">Standard</div><div style="font-size:.78rem;color:var(--text-muted);">Entry level</div></div>
+      <span class="tier-badge badge-gold">Current</span>
+    </div>
+    <div class="tier-body">
+      <div class="tier-feature">Promote up to 40 cars daily</div>
+      <div class="tier-feature">Access to all 40 car listings</div>
+      <div class="tier-feature">Basic referral commissions</div>
+      <div class="tier-feature">Standard support</div>
+      <div style="margin-top:1rem;"><div class="tier-price">Free</div><div class="tier-period">on sign-up</div></div>
+    </div>
+  </div>
+
+  <div class="tier-card">
+    <div class="tier-header" style="background:linear-gradient(135deg,rgba(201,168,76,.08),transparent);">
+      <div><div class="tier-name">Gold Partner</div><div style="font-size:.78rem;color:var(--text-muted);">Enhanced earnings</div></div>
+      <span class="tier-badge" style="background:rgba(201,168,76,.15);color:var(--gold);border:1px solid rgba(201,168,76,.3);">Popular</span>
+    </div>
+    <div class="tier-body">
+      <div class="tier-feature">All Standard features</div>
+      <div class="tier-feature">Priority matching — earn up to 2x per match</div>
+      <div class="tier-feature">Enhanced referral bonuses</div>
+      <div class="tier-feature">Priority support 24/7</div>
+      <div class="tier-feature">Monthly performance bonus</div>
+      <div style="margin-top:1rem;"><div class="tier-price">$99<span style="font-size:1rem;font-weight:400;">/mo</span></div><div class="tier-period">Billed monthly</div></div>
+      <button class="btn-gold" style="width:100%;margin-top:1rem;" onclick="openPanel('upgradePanel')">Upgrade to Gold →</button>
+    </div>
+  </div>
+
+  <div class="tier-card">
+    <div class="tier-header" style="background:linear-gradient(135deg,rgba(255,255,255,.04),transparent);">
+      <div><div class="tier-name">Platinum Elite</div><div style="font-size:.78rem;color:var(--text-muted);">Maximum returns</div></div>
+      <span class="tier-badge" style="background:rgba(189,195,199,.15);color:#bdc3c7;border:1px solid rgba(189,195,199,.3);">Premium</span>
+    </div>
+    <div class="tier-body">
+      <div class="tier-feature">All Gold features</div>
+      <div class="tier-feature">3x commission multiplier</div>
+      <div class="tier-feature">Dedicated account manager</div>
+      <div class="tier-feature">Early access to new car listings</div>
+      <div class="tier-feature">VIP withdrawal processing</div>
+      <div style="margin-top:1rem;"><div class="tier-price">$299<span style="font-size:1rem;font-weight:400;">/mo</span></div><div class="tier-period">Billed monthly</div></div>
+      <button class="btn-outline" style="width:100%;margin-top:1rem;" onclick="openPanel('upgradePanel')">Upgrade to Platinum →</button>
+    </div>
+  </div>
+
+</div>
+
+<nav class="bottom-nav">
+  <a href="home.html"><span class="bn-icon">🏠</span>Home</a>
+  <a href="wallet.html"><span class="bn-icon">💰</span>Wallet</a>
+  <a href="incentives.html" class="active"><span class="bn-icon">🎁</span>Incentives</a>
+  <a href="profile.html"><span class="bn-icon">👤</span>Profile</a>
+</nav>
+
+<!-- Upgrade Panel -->
+<div class="panel-overlay" id="upgradePanel">
+  <div class="panel">
+    <div class="panel-header"><span class="panel-title">Upgrade Membership</span><button class="panel-close" onclick="closePanel('upgradePanel')">✕</button></div>
+    <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:1.5rem;">Contact support to upgrade your membership and unlock higher earning tiers.</p>
+    <div class="menu-item" onclick="closePanel('upgradePanel');showToast('Opening live chat...')"><div class="menu-item-left"><div class="menu-icon">💬</div><span>Live Chat with Admin</span></div><span>›</span></div>
+    <div class="menu-item"><div class="menu-item-left"><div class="menu-icon">📧</div><span>support@auto1group.com</span></div><span>›</span></div>
+    <div class="menu-item"><div class="menu-item-left"><div class="menu-icon">📱</div><span>WhatsApp Support</span></div><span>›</span></div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+requireAuth();
+const u = getUser();
+document.getElementById('refCode').textContent = u.referral || '—';
+document.getElementById('refCount').textContent = u.refCount || 0;
+document.getElementById('refEarn').textContent = '$'+(u.refEarnings||0).toFixed(0);
+
+function copyRef(){
+  navigator.clipboard.writeText(u.referral).then(()=>showToast('Referral code copied! Share it to earn.')).catch(()=>showToast(u.referral));
+}
+</script>
+</body>
+</html>

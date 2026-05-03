@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile — Auto1 Group</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.top-bar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.25rem;background:var(--navy-light);border-bottom:1px solid var(--border);}
+.page-title{font-family:'Playfair Display',serif;font-size:1.2rem;}
+
+.profile-hero{background:linear-gradient(135deg,var(--navy-mid),#0d2a52);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem 1.25rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:1rem;}
+.profile-avatar-lg{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.5rem;color:var(--navy);flex-shrink:0;border:3px solid rgba(201,168,76,.4);}
+.profile-info h3{font-size:1.15rem;font-weight:600;margin-bottom:.2rem;}
+.profile-info p{font-size:.83rem;color:var(--text-muted);}
+.profile-code{display:inline-block;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.25);color:var(--gold);font-family:monospace;font-size:.8rem;padding:.2rem .7rem;border-radius:50px;margin-top:.4rem;}
+
+.credit-section{margin-bottom:1.25rem;}
+.credit-label{display:flex;justify-content:space-between;font-size:.8rem;color:var(--text-muted);margin-bottom:.4rem;}
+.credit-value{color:var(--gold);font-weight:600;}
+
+.section-group{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1rem;}
+.section-group-title{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);padding:.85rem 1.25rem .4rem;font-weight:600;}
+.menu-link{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.25rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background .2s;}
+.menu-link:last-child{border-bottom:none;}
+.menu-link:hover{background:rgba(201,168,76,.05);}
+.menu-link-left{display:flex;align-items:center;gap:.85rem;font-size:.92rem;}
+
+.logout-btn{width:100%;padding:1rem;font-size:1rem;font-weight:600;background:rgba(231,76,60,.12);border:1px solid rgba(231,76,60,.3);border-radius:var(--radius);color:var(--danger);cursor:pointer;transition:background .2s;font-family:'Outfit',sans-serif;}
+.logout-btn:hover{background:rgba(231,76,60,.2);}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div style="width:60px;"></div>
+  <span class="page-title">My Account</span>
+  <div style="width:60px;"></div>
+</div>
+
+<div style="padding:70px 1.25rem 90px;">
+
+  <!-- Profile Hero -->
+  <div class="profile-hero">
+    <div class="profile-avatar-lg" id="heroAvatar"></div>
+    <div class="profile-info">
+      <h3 id="heroName">—</h3>
+      <p id="heroEmail">—</p>
+      <span class="profile-code" id="heroCode">—</span>
+    </div>
+  </div>
+
+  <!-- Credit Score -->
+  <div class="credit-section">
+    <div class="credit-label"><span>Credit Score</span><span class="credit-value">100%</span></div>
+    <div class="progress-bar"><div class="progress-fill" style="width:100%;"></div></div>
+  </div>
+
+  <!-- Wallet quick stats -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:1.25rem;">
+    <div class="stat-card" style="text-align:center;">
+      <div class="stat-label">Wallet</div>
+      <div class="stat-value" id="pWallet">$0.00</div>
+    </div>
+    <div class="stat-card" style="text-align:center;">
+      <div class="stat-label">Commission</div>
+      <div class="stat-value" id="pComm">$0.00</div>
+    </div>
+  </div>
+
+  <!-- My Financial -->
+  <div class="section-group">
+    <div class="section-group-title">My Financial</div>
+    <div class="menu-link" onclick="window.location.href='wallet.html'">
+      <div class="menu-link-left"><div class="menu-icon">💳</div>Deposit</div><span style="color:var(--text-muted);">›</span>
+    </div>
+    <div class="menu-link" onclick="window.location.href='wallet.html'">
+      <div class="menu-link-left"><div class="menu-icon">🏦</div>Withdraw</div><span style="color:var(--text-muted);">›</span>
+    </div>
+    <div class="menu-link" onclick="window.location.href='incentives.html'">
+      <div class="menu-link-left"><div class="menu-icon">👑</div>Promoter Membership</div><span style="color:var(--text-muted);">›</span>
+    </div>
+  </div>
+
+  <!-- My Detail -->
+  <div class="section-group">
+    <div class="section-group-title">My Detail</div>
+    <div class="menu-link" onclick="openPanel('personalPanel')">
+      <div class="menu-link-left"><div class="menu-icon">👤</div>Personal Information</div><span style="color:var(--text-muted);">›</span>
+    </div>
+    <div class="menu-link" onclick="openPanel('paymentPanel')">
+      <div class="menu-link-left"><div class="menu-icon">💳</div>Payment Methods</div><span style="color:var(--text-muted);">›</span>
+    </div>
+  </div>
+
+  <!-- Other -->
+  <div class="section-group">
+    <div class="section-group-title">Other</div>
+    <div class="menu-link" onclick="openPanel('contactPanel')">
+      <div class="menu-link-left"><div class="menu-icon">💬</div>Contact Us</div><span style="color:var(--text-muted);">›</span>
+    </div>
+    <div class="menu-link" onclick="openPanel('notifPanel')">
+      <div class="menu-link-left"><div class="menu-icon">🔔</div>Notifications</div><span style="color:var(--text-muted);">›</span>
+    </div>
+    <div class="menu-link" onclick="openPanel('faqPanel')">
+      <div class="menu-link-left"><div class="menu-icon">❓</div>FAQs</div><span style="color:var(--text-muted);">›</span>
+    </div>
+    <div class="menu-link" onclick="openPanel('certPanel')">
+      <div class="menu-link-left"><div class="menu-icon">📜</div>Certificate</div><span style="color:var(--text-muted);">›</span>
+    </div>
+  </div>
+
+  <button class="logout-btn" onclick="logout()">🚪 Log Out</button>
+
+</div>
+
+<nav class="bottom-nav">
+  <a href="home.html"><span class="bn-icon">🏠</span>Home</a>
+  <a href="wallet.html"><span class="bn-icon">💰</span>Wallet</a>
+  <a href="incentives.html"><span class="bn-icon">🎁</span>Incentives</a>
+  <a href="profile.html" class="active"><span class="bn-icon">👤</span>Profile</a>
+</nav>
+
+<!-- PERSONAL INFO PANEL -->
+<div class="panel-overlay" id="personalPanel">
+  <div class="panel">
+    <div class="panel-header"><span class="panel-title">Personal Information</span><button class="panel-close" onclick="closePanel('personalPanel')">✕</button></div>
+    <div class="form-group"><label class="form-label">Username</label><input class="form-input" type="text" id="editUsername" placeholder="Username"></div>
+    <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" type="email" id="editEmail" placeholder="Email"></div>
+    <div class="form-group"><label class="form-label">Phone Number</label><input class="form-input" type="tel" id="editPhone" placeholder="+254 7XX XXX XXX"></div>
+    <div class="form-group"><label class="form-label">Country</label>
+      <select class="form-input" id="editCountry">
+        <option>Kenya</option><option>Nigeria</option><option>South Africa</option><option>Uganda</option><option>Tanzania</option><option>Ghana</option><option>Ethiopia</option><option>United States</option><option>United Kingdom</option><option>Other</option>
+      </select>
+    </div>
+    <button class="btn-gold" style="width:100%;" onclick="savePersonal()">Save Changes</button>
+  </div>
+</div>
+
+<!-- PAYMENT METHODS PANEL -->
+<div class="panel-overlay" id="paymentPanel">
+  <div class="panel">
+    <div class="panel-header"><span class="panel-title">Payment Methods</span><button class="panel-close" onclick="closePanel('paymentPanel')">✕</button></div>
+    <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:1.5rem;">Add your preferred payment methods for withdrawals.</p>
+    <div class="form-group"><label class="form-label">M-Pesa Number</label><input class="form-input" type="tel" id="mpesa" placeholder="07XX XXX XXX"></div>
+    <div class="form-group"><label class="form-label">USDT Wallet (TRC20)</label><input class="form-input" type="text" id="usdt" placeholder="TRC20 address"></div>
+    <div class="form-group"><label class="form-label">Bitcoin Address</label><input class="form-input" type="text" id="btc" placeholder="Bitcoin address"></div>
+    <div class="form-group"><label class="form-label">Bank Account Number</label><input class="form-input" type="text" id="bank" placeholder="Account number"></div>
+    <button class="btn-gold" style="width:100%;" onclick="savePayment()">Save Payment Methods</button>
+  </div>
+</div>
+
+<!-- CONTACT PANEL -->
+<div class="panel-overlay" id="contactPanel">
+  <div class="panel">
+    <div class="panel-header"><span class="panel-title">Contact Us</span><button class="panel-close" onclick="closePanel('contactPanel')">✕</button></div>
+    <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:1.5rem;">Get in touch with the Auto1 Group team.</p>
+    <div class="menu-item"><div class="menu-item-left"><div class="menu-icon">📧</div><span>support@auto1group.com</span></div></div>
+    <div class="menu-item"><div class="menu-item-left"><div class="menu-icon">💬</div><span>Live Chat with Admin</span></div><span>›</span></div>
+    <div class="menu-item"><div class="menu-item-left"><div class="menu-icon">📱</div><span>WhatsApp Support</span></div><span>›</span></div>
+    <div class="menu-item"><div class="menu-item-left"><div class="menu-icon">🐦</div><span>@Auto1Group</span></div><span>›</span></div>
+  </div>
+</div>
+
+<!-- NOTIFICATIONS PANEL -->
+<div class="panel-overlay" id="notifPanel">
+  <div class="panel">
+    <div class="panel-header"><span class="panel-title">Notifications</span><button class="panel-close" onclick="closePanel('notifPanel')">✕</button></div>
+    <div class="menu-item"><div class="menu-item-left"><div class="menu-icon">🚗</div><div><div style="font-size:.9rem;">New car: <strong>Koenigsegg Jesko</strong> added!</div><div style="font-size:.75rem;color:var(--text-muted);">2 min ago</div></div></div></div>
+    <div class="menu-item"><div class="menu-item-left"><div class="menu-icon">💰</div><div><div style="font-size:.9rem;">Your wallet balance was updated.</div><div style="font-size:.75rem;color:var(--text-muted);">1 hour ago</div></div></div></div>
+    <div class="menu-item"><div class="menu-item-left"><div class="menu-icon">🎉</div><div><div style="font-size:.9rem;">Welcome! Start promoting to earn commissions.</div><div style="font-size:.75rem;color:var(--text-muted);">Today</div></div></div></div>
+  </div>
+</div>
+
+<!-- FAQ PANEL -->
+<div class="panel-overlay" id="faqPanel">
+  <div class="panel">
+    <div class="panel-header"><span class="panel-title">FAQs</span><button class="panel-close" onclick="closePanel('faqPanel')">✕</button></div>
+    <div style="font-size:.88rem;color:var(--text-muted);line-height:1.75;">
+      <p style="margin-bottom:1.25rem;"><strong style="color:var(--white);">1. Depositing Campaign Funds</strong><br>Before allocating funds, contact support to verify the correct account details. After depositing, provide your payment receipt to ensure your account is updated promptly.</p>
+      <p style="margin-bottom:1.25rem;"><strong style="color:var(--white);">2. Advertising Campaigns</strong><br>Performance may vary depending on market conditions and seasonal trends. Larger budgets typically achieve broader reach and higher engagement.</p>
+      <p style="margin-bottom:1.25rem;"><strong style="color:var(--white);">3. Withdrawal of Funds</strong><br>You may request withdrawal of remaining campaign funds at any time. Processing hours: 9:59 AM – 10:00 PM EAT.</p>
+      <p style="margin-bottom:1.25rem;"><strong style="color:var(--white);">4. Referral & Partner Program</strong><br>Earn 20% commission on profits from direct referrals. Partners may also build downlines earning additional levels of commission.</p>
+      <p><strong style="color:var(--white);">5. Operating Hours</strong><br>Manage and launch campaigns daily from 8:59 AM – 9:00 PM EAT.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CERTIFICATE PANEL -->
+<div class="panel-overlay" id="certPanel">
+  <div class="panel">
+    <div class="panel-header"><span class="panel-title">Certificate</span><button class="panel-close" onclick="closePanel('certPanel')">✕</button></div>
+    <div style="background:white;border-radius:var(--radius);padding:2rem;color:#111;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:2px solid #eee;">
+        <div style="font-size:.7rem;color:#888;">DEPARTMENT OF COMMERCE</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:#0a1628;">AUTO<span style="color:#c9a84c;">1</span> GROUP</div>
+      </div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;margin-bottom:1.5rem;color:#111;">Legal Statement</h2>
+      <p style="font-size:.82rem;font-weight:700;margin-bottom:.5rem;color:#111;">ACCEPTANCE OF TERMS</p>
+      <p style="font-size:.8rem;color:#444;line-height:1.7;margin-bottom:1rem;">Before using or accessing this website, please read the terms and conditions of use and the disclaimer. By accessing or using this website, you agree to these terms and all applicable laws.</p>
+      <p style="font-size:.82rem;font-weight:700;margin-bottom:.5rem;color:#111;">OWNERSHIP AND COPYRIGHT</p>
+      <p style="font-size:.8rem;color:#444;line-height:1.7;margin-bottom:1.5rem;">All content and terms of use are copyrighted © Auto1 Group 2012–2026, all rights reserved. Auto1 Group is a registered trademark.</p>
+      <div style="text-align:center;border-top:1px solid #eee;padding-top:1.25rem;">
+        <div style="font-family:'Playfair Display',serif;font-style:italic;font-size:1.1rem;margin-bottom:.3rem;color:#111;">Christian Bertermann</div>
+        <div style="font-size:.78rem;color:#666;">President & CEO, Auto1 Group</div>
+        <div style="font-size:.72rem;color:#999;margin-top:.75rem;">© 2026 Auto1 Group. All rights reserved.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+requireAuth();
+
+function loadProfile(){
+  const u = getUser();
+  document.getElementById('heroAvatar').textContent = initials(u.username);
+  document.getElementById('heroName').textContent = u.username;
+  document.getElementById('heroEmail').textContent = u.email;
+  document.getElementById('heroCode').textContent = 'Code: ' + u.referral;
+  document.getElementById('pWallet').textContent = formatMoney(u.wallet||0);
+  document.getElementById('pComm').textContent = formatMoney(u.commission||0);
+  // prefill personal info
+  document.getElementById('editUsername').value = u.username||'';
+  document.getElementById('editEmail').value = u.email||'';
+  document.getElementById('editPhone').value = u.phone||'';
+  // prefill payments
+  const pm = Store.get('a1g_payments')||{};
+  document.getElementById('mpesa').value = pm.mpesa||'';
+  document.getElementById('usdt').value = pm.usdt||'';
+  document.getElementById('btc').value = pm.btc||'';
+  document.getElementById('bank').value = pm.bank||'';
+}
+
+function savePersonal(){
+  const u = getUser();
+  u.username = document.getElementById('editUsername').value.trim()||u.username;
+  u.email = document.getElementById('editEmail').value.trim()||u.email;
+  u.phone = document.getElementById('editPhone').value.trim();
+  u.country = document.getElementById('editCountry').value;
+  Store.set('a1g_user',u);
+  closePanel('personalPanel');
+  showToast('Personal information saved! ✅');
+  loadProfile();
+}
+
+function savePayment(){
+  const pm = {
+    mpesa: document.getElementById('mpesa').value.trim(),
+    usdt: document.getElementById('usdt').value.trim(),
+    btc: document.getElementById('btc').value.trim(),
+    bank: document.getElementById('bank').value.trim(),
+  };
+  Store.set('a1g_payments',pm);
+  closePanel('paymentPanel');
+  showToast('Payment methods saved! ✅');
+}
+
+loadProfile();
+</script>
+</body>
+</html>

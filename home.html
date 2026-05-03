@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Auto1 Group</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.top-bar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.25rem;background:var(--navy-light);border-bottom:1px solid var(--border);}
+.top-bar-left{display:flex;flex-direction:column;}
+.greeting{font-size:.78rem;color:var(--text-muted);}
+.username{font-size:1.05rem;font-weight:600;}
+.top-bar-right{display:flex;align-items:center;gap:.75rem;}
+.icon-btn{width:38px;height:38px;border-radius:50%;background:rgba(201,168,76,.1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;transition:background .2s;}
+.icon-btn:hover{background:rgba(201,168,76,.2);}
+
+.pw{padding:1rem 1.25rem;}
+
+/* Stat cards */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:1.25rem;}
+
+/* Slideshow */
+.slideshow-wrap{margin-bottom:1.25rem;}
+.slideshow-label{font-size:.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.75rem;display:flex;justify-content:space-between;align-items:center;}
+.slide-counter{color:var(--gold);}
+.thumbs{display:flex;gap:.6rem;overflow-x:auto;padding-bottom:.5rem;scrollbar-width:none;}
+.thumbs::-webkit-scrollbar{display:none;}
+.thumb{width:80px;height:56px;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:border-color .2s;flex-shrink:0;}
+.thumb.active{border-color:var(--gold);}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.main-slide{position:relative;border-radius:var(--radius);overflow:hidden;aspect-ratio:16/9;background:var(--navy-mid);margin-bottom:.75rem;}
+.main-slide img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .4s;}
+.slide-info{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(10,22,40,.95));padding:1.25rem 1rem .9rem;}
+.slide-cat{font-size:.7rem;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;}
+.slide-name{font-size:1.1rem;font-weight:600;margin:.15rem 0;}
+.slide-price{font-size:.85rem;color:var(--text-muted);}
+.slide-rating{position:absolute;top:.75rem;right:.75rem;background:rgba(10,22,40,.85);border:1px solid var(--border);border-radius:50px;padding:.25rem .65rem;font-size:.75rem;color:var(--gold);}
+.slide-arrows{display:flex;gap:.5rem;}
+.arr-btn{width:36px;height:36px;border-radius:50%;background:rgba(201,168,76,.12);border:1px solid var(--border);color:var(--gold);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+.arr-btn:hover{background:rgba(201,168,76,.25);}
+
+/* Match button */
+.match-btn{width:100%;padding:1rem;font-size:1.05rem;font-weight:700;letter-spacing:.06em;border-radius:14px;margin-bottom:1rem;}
+.match-progress{display:flex;justify-content:space-between;font-size:.8rem;color:var(--text-muted);margin-bottom:.4rem;}
+
+/* Notes */
+.notes-card{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1.25rem;}
+.notes-title{font-size:.8rem;font-weight:600;color:var(--gold);margin-bottom:.5rem;}
+.notes-card p{font-size:.82rem;color:var(--text-muted);line-height:1.6;}
+
+/* Round info */
+.round-card{background:linear-gradient(135deg,var(--navy-mid),#0d2a52);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center;}
+.round-left h4{font-size:.85rem;color:var(--text-muted);margin-bottom:.2rem;}
+.round-left p{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--gold);}
+.round-right{text-align:right;font-size:.82rem;color:var(--text-muted);}
+
+/* Dropdown menu */
+.dropdown{position:absolute;top:60px;right:1.25rem;background:var(--navy-light);border:1px solid var(--border);border-radius:var(--radius);min-width:200px;z-index:200;display:none;overflow:hidden;}
+.dropdown.open{display:block;}
+.dd-item{display:flex;align-items:center;gap:.75rem;padding:.8rem 1rem;font-size:.88rem;cursor:pointer;transition:background .2s;}
+.dd-item:hover{background:rgba(201,168,76,.08);}
+.dd-item.danger{color:var(--danger);}
+.dd-divider{height:1px;background:var(--border);}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-bar-left">
+    <span class="greeting">Hi, <span id="greetName">Partner</span></span>
+    <span class="username">Welcome back 🚗</span>
+  </div>
+  <div class="top-bar-right" style="position:relative;">
+    <div class="icon-btn" onclick="openPanel('notifPanel')">🔔</div>
+    <div class="avatar" id="userAvatar" onclick="document.getElementById('ddMenu').classList.toggle('open')" style="cursor:pointer;"></div>
+    <div class="dropdown" id="ddMenu">
+      <div class="dd-item" onclick="openPanel('profilePanel')">👤 My Profile</div>
+      <div class="dd-item" onclick="window.location.href='profile.html'">⚙️ Account Settings</div>
+      <div class="dd-item" onclick="openPanel('notifPanel')">🔔 Notifications</div>
+      <div class="dd-item" onclick="openPanel('contactPanel')">💬 Help / Support</div>
+      <div class="dd-item" onclick="openPanel('aboutPanel')">ℹ️ About Us</div>
+      <div class="dd-item" onclick="openPanel('termsPanel')">📄 Terms of Service</div>
+      <div class="dd-item" onclick="openPanel('privacyPanel')">🔒 Privacy Policy</div>
+      <div class="dd-divider"></div>
+      <div class="dd-item danger" onclick="logout()">🚪 Log Out</div>
+    </div>
+  </div>
+</div>
+
+<div class="pw" style="padding-top:70px;padding-bottom:80px;">
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Wallet Balance</div>
+      <div class="stat-value" id="walletVal">$0.00</div>
+      <div class="stat-sub">Deposited + profits</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Commission</div>
+      <div class="stat-value" id="commVal">$0.00</div>
+      <div class="stat-sub">Resets at midnight</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Earnings</div>
+      <div class="stat-value" id="earnVal">$0.00</div>
+      <div class="stat-sub">All time</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Pending</div>
+      <div class="stat-value" id="pendVal">$0.00</div>
+      <div class="stat-sub">Withdrawal</div>
+    </div>
+  </div>
+
+  <!-- Round info -->
+  <div class="round-card">
+    <div class="round-left">
+      <h4>Current Round</h4>
+      <p id="roundVal">1 of 3</p>
+    </div>
+    <div class="round-right">
+      <div>Cars Promoted Today</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--gold-light);" id="matchCountDisp">0 / 40</div>
+    </div>
+  </div>
+
+  <!-- Slideshow -->
+  <div class="slideshow-wrap">
+    <div class="slideshow-label">
+      <span>Start Promoting</span>
+      <span class="slide-counter" id="slideCounter">1 / 40</span>
+    </div>
+    <div class="thumbs" id="thumbsContainer"></div>
+    <div class="main-slide">
+      <img id="mainImg" src="" alt="Car">
+      <div class="slide-rating" id="mainRating">★ 5.0</div>
+      <div class="slide-info">
+        <div class="slide-cat" id="mainCat"></div>
+        <div class="slide-name" id="mainName"></div>
+        <div class="slide-price" id="mainPrice"></div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div class="slide-arrows">
+        <button class="arr-btn" onclick="prevSlide()">◀</button>
+        <button class="arr-btn" onclick="nextSlide()">▶</button>
+      </div>
+      <span style="font-size:.8rem;color:var(--text-muted);">Swipe or use arrows</span>
+    </div>
+  </div>
+
+  <!-- Match progress -->
+  <div class="match-progress">
+    <span>Daily Progress</span>
+    <span id="matchProgressText">0 / 40</span>
+  </div>
+  <div class="progress-bar" style="margin-bottom:1rem;">
+    <div class="progress-fill" id="matchProgressBar" style="width:0%"></div>
+  </div>
+
+  <button class="btn-gold match-btn" id="matchBtn" onclick="doMatch()">MATCH (0/40)</button>
+
+  <!-- Notes -->
+  <div class="notes-card">
+    <div class="notes-title">📌 Important Notes</div>
+    <p>• Online Support Hours: 09:00 – 21:00 EAT<br>
+    • Daily profit resets at midnight and is recalculated for the next day.<br>
+    • For questions, please contact Online Customer Service.<br>
+    • Partnering with Auto1 to drive career development and shape the future of automotive advertising.</p>
+  </div>
+
+</div>
+
+<!-- Bottom Nav -->
+<nav class="bottom-nav">
+  <a href="home.html" class="active"><span class="bn-icon">🏠</span>Home</a>
+  <a href="wallet.html"><span class="bn-icon">💰</span>Wallet</a>
+  <a href="incentives.html"><span class="bn-icon">🎁</span>Incentives</a>
+  <a href="profile.html"><span class="bn-icon">👤</span>Profile</a>
+</nav>
+
+<!-- PANELS -->
+<div class="panel-overlay" id="profilePanel">
+  <div class="panel">
+    <div class="panel-header"><span class="panel-title">My Profile</span><button class="panel-close" onclick="closePanel('profilePanel')">✕</button></div>
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;">
+      <div class="avatar" id="profileAvatar" style="width:60px;height:60px;font-size:1.4rem;"></div>
+      <div><div style="font-size:1.1rem;font-weight:600;" id="profileName"></div><div style="font-size:.85rem;color:var(--text-muted);" id="profileEmail"></div></div>
+    </div>
+    <div class="divider"></div>
+    <div style="margin-bottom:1rem;">
+      <div class="section-label">Your Referral Code</div>
+      <div style="background:rgba(201,168,76,.08);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.85rem 1rem;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-family:monospace;font-size:1.1rem;color:var(--gold);letter-spacing:.1em;" id="profileRefCode"></span>
+        <button class="btn-gold" style="padding:.4rem 1rem;font-size:.8rem;" onclick="copyRef()">Copy</button>
+      </div>
+      <p style="font-size:.78rem;color:var(--text-muted);margin-top:.5rem;">Share your code to earn referral bonuses when friends join.</p>
+    </div>
+  </div>
+</div>
+
+<div class="panel-overlay" id="notifPanel">
+  <div class="panel">
+    <div class="panel-header"><span class="panel-title">Notifications</span><button class="panel-close" onclick="closePanel('notifPanel')">✕</button></div>
+    <div class="menu-item"><div class="menu-item-left"><div class="menu-icon">🚗</div><div><div style="font-size:.9rem;">New car added: <strong>Koenigsegg Jesko</strong> is now available!</div><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">2 minutes ago</div></div></div></div>
+    <div class="menu-item"><div class="menu-item-left"><div class="menu-icon">💰</div><div><div style="font-size:.9rem;">Your wallet balance has been updated.</div><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">1 hour ago</div></div></div></div>
+    <div class="menu-item"><div class="menu-item-left"><div class="menu-icon">🎉</div><div><div style="font-size:.9rem;">Welcome to Auto1 Group! Start promoting to earn.</div><div style="font-size:.75rem;color:var(--text-muted);margin-top:.2rem;">Today</div></div></div></div>
+  </div>
+</div>
+
+<div class="panel-overlay" id="contactPanel">
+  <div class="panel">
+    <div class="panel-header"><span class="panel-title">Help / Support</span><button class="panel-close" onclick="closePanel('contactPanel')">✕</button></div>
+    <p style="font-size:.9rem;color:var(--text-muted);margin-bottom:1.5rem;">Contact our support team for assistance.</p>
+    <div class="menu-item"><div class="menu-item-left"><div class="menu-icon">💬</div><span>Live Chat with Admin</span></div><span>›</span></div>
+    <div class="menu-item"><div class="menu-item-left"><div class="menu-icon">📧</div><span>support@auto1group.com</span></div><span>›</span></div>
+    <div class="menu-item"><div class="menu-item-left"><div class="menu-icon">📱</div><span>WhatsApp Support</span></div><span>›</span></div>
+  </div>
+</div>
+
+<div class="panel-overlay" id="aboutPanel">
+  <div class="panel">
+    <div class="panel-header"><span class="panel-title">About Us</span><button class="panel-close" onclick="closePanel('aboutPanel')">✕</button></div>
+    <p style="font-size:.9rem;color:var(--text-muted);margin-bottom:1rem;">Welcome to <strong style="color:var(--white);">Auto1 Group</strong> — Europe's premier automotive advertising platform.</p>
+    <div class="section-label">What We Do</div>
+    <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:1rem;line-height:1.7;">We provide a platform where advertising partners promote premium vehicles and earn commissions. Our network connects 60,000+ dealers across 30+ countries.</p>
+    <div class="section-label">Our Values</div>
+    <p style="font-size:.88rem;color:var(--text-muted);line-height:1.7;"><strong style="color:var(--gold);">Integrity:</strong> Transparent earnings and honest partnerships.<br><br><strong style="color:var(--gold);">Innovation:</strong> Cutting-edge digital advertising solutions.<br><br><strong style="color:var(--gold);">Excellence:</strong> Only the finest premium vehicles on our platform.</p>
+  </div>
+</div>
+
+<div class="panel-overlay" id="termsPanel">
+  <div class="panel">
+    <div class="panel-header"><span class="panel-title">Terms of Service</span><button class="panel-close" onclick="closePanel('termsPanel')">✕</button></div>
+    <div style="font-size:.88rem;color:var(--text-muted);line-height:1.75;">
+      <p style="margin-bottom:1rem;"><strong style="color:var(--white);">1. Acceptance</strong><br>By using Auto1 Group, you agree to these terms.</p>
+      <p style="margin-bottom:1rem;"><strong style="color:var(--white);">2. Earnings & Withdrawals</strong><br>Minimum withdrawal is $10. Complete Round 1 before requesting withdrawal. Daily profit resets at midnight.</p>
+      <p style="margin-bottom:1rem;"><strong style="color:var(--white);">3. Deposits</strong><br>A deposit is required to activate advertising campaigns. All deposits must be confirmed with support.</p>
+      <p style="margin-bottom:1rem;"><strong style="color:var(--white);">4. Referral Program</strong><br>Earn 20% referral commission on profits generated by referred partners. Multi-level downline commissions apply.</p>
+      <p><strong style="color:var(--white);">5. Operating Hours</strong><br>Platform available 24/7. Support hours: 09:00–21:00 EAT.</p>
+    </div>
+  </div>
+</div>
+
+<div class="panel-overlay" id="privacyPanel">
+  <div class="panel">
+    <div class="panel-header"><span class="panel-title">Privacy Policy</span><button class="panel-close" onclick="closePanel('privacyPanel')">✕</button></div>
+    <div style="font-size:.88rem;color:var(--text-muted);line-height:1.75;">
+      <p style="margin-bottom:1rem;"><strong style="color:var(--white);">Data We Collect</strong><br>We collect your name, email, transaction data, and advertising activity.</p>
+      <p style="margin-bottom:1rem;"><strong style="color:var(--white);">Data Sharing</strong><br>We do not sell your personal data to third parties.</p>
+      <p><strong style="color:var(--white);">Security</strong><br>All data is encrypted and stored securely. We follow industry-standard security practices.</p>
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+requireAuth();
+let currentSlide = 0;
+let matchCount = 0;
+const MAX_MATCH = 40;
+
+function loadUser(){
+  const u = getUser();
+  if(!u) return;
+  document.getElementById('greetName').textContent = u.username;
+  document.getElementById('userAvatar').textContent = initials(u.username);
+  document.getElementById('profileAvatar').textContent = initials(u.username);
+  document.getElementById('profileName').textContent = u.username;
+  document.getElementById('profileEmail').textContent = u.email;
+  document.getElementById('profileRefCode').textContent = u.referral;
+  document.getElementById('walletVal').textContent = formatMoney(u.wallet);
+  document.getElementById('commVal').textContent = formatMoney(u.commission);
+  document.getElementById('earnVal').textContent = formatMoney(u.earnings);
+  document.getElementById('pendVal').textContent = formatMoney(u.pending||0);
+  document.getElementById('roundVal').textContent = (u.round||1) + ' of 3';
+  matchCount = u.matchCount || 0;
+  updateMatchUI();
+}
+
+function buildSlideshow(){
+  const tc = document.getElementById('thumbsContainer');
+  CARS.forEach((c,i)=>{
+    const d = document.createElement('div');
+    d.className='thumb'+(i===0?' active':'');
+    d.innerHTML=`<img src="${c.img}" alt="${c.name}" loading="lazy">`;
+    d.onclick=()=>goSlide(i);
+    tc.appendChild(d);
+  });
+  goSlide(0);
+}
+
+function goSlide(i){
+  currentSlide = i;
+  const c = CARS[i];
+  document.getElementById('mainImg').style.opacity='0';
+  setTimeout(()=>{
+    document.getElementById('mainImg').src = c.img;
+    document.getElementById('mainImg').style.opacity='1';
+    document.getElementById('mainCat').textContent = c.cat;
+    document.getElementById('mainName').textContent = c.name;
+    document.getElementById('mainPrice').textContent = c.price;
+    document.getElementById('mainRating').textContent = '★ ' + c.rating;
+    document.getElementById('slideCounter').textContent = (i+1)+' / '+CARS.length;
+  },200);
+  document.querySelectorAll('.thumb').forEach((t,j)=>t.classList.toggle('active',j===i));
+  // scroll thumb into view
+  const thumbs = document.querySelectorAll('.thumb');
+  if(thumbs[i]) thumbs[i].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+}
+
+function nextSlide(){ goSlide((currentSlide+1)%CARS.length); }
+function prevSlide(){ goSlide((currentSlide-1+CARS.length)%CARS.length); }
+
+// Auto-advance every 4s
+setInterval(nextSlide, 4000);
+
+function updateMatchUI(){
+  const pct = Math.round((matchCount/MAX_MATCH)*100);
+  document.getElementById('matchProgressBar').style.width = pct+'%';
+  document.getElementById('matchProgressText').textContent = matchCount+' / '+MAX_MATCH;
+  document.getElementById('matchCountDisp').textContent = matchCount+' / '+MAX_MATCH;
+  document.getElementById('matchBtn').textContent = 'MATCH ('+matchCount+'/'+MAX_MATCH+')';
+}
+
+function doMatch(){
+  if(matchCount >= MAX_MATCH){ showToast('You have completed all matches for today! 🎉'); return; }
+  const u = getUser();
+  if(!u.wallet || u.wallet <= 0){ showToast('Please deposit funds to start matching.'); return; }
+  matchCount++;
+  const earn = +(Math.random()*2+0.5).toFixed(2);
+  u.matchCount = matchCount;
+  u.commission = +(u.commission||0) + earn;
+  u.earnings = +(u.earnings||0) + earn;
+  Store.set('a1g_user',u);
+  updateMatchUI();
+  document.getElementById('commVal').textContent = formatMoney(u.commission);
+  document.getElementById('earnVal').textContent = formatMoney(u.earnings);
+  showToast('Match successful! +$'+earn.toFixed(2)+' commission 🚗');
+  nextSlide();
+}
+
+function copyRef(){
+  const u = getUser();
+  navigator.clipboard.writeText(u.referral).then(()=>showToast('Referral code copied!')).catch(()=>showToast(u.referral));
+}
+
+// Close dropdown on outside click
+document.addEventListener('click',e=>{
+  const dd=document.getElementById('ddMenu');
+  if(!e.target.closest('#ddMenu')&&!e.target.closest('.avatar')) dd.classList.remove('open');
+});
+
+loadUser();
+buildSlideshow();
+</script>
+</body>
+</html>

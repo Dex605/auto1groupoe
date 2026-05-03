@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign In — Auto1 Group</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.auth-wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.25rem;}
+.auth-bg{position:fixed;inset:0;background:url('https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=1400&q=70') center/cover no-repeat;opacity:.07;z-index:-1;}
+.auth-logo{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;margin-bottom:.5rem;text-align:center;}
+.auth-logo span{color:var(--gold);}
+.auth-tagline{font-size:.82rem;color:var(--text-muted);text-align:center;margin-bottom:2rem;}
+.auth-card{width:100%;max-width:420px;background:rgba(17,34,64,.98);border:1px solid var(--border);border-radius:20px;padding:2.25rem 2rem;}
+.auth-title{font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:.4rem;}
+.auth-sub{font-size:.88rem;color:var(--text-muted);margin-bottom:1.75rem;}
+.pw-wrap{position:relative;}
+.pw-wrap .form-input{padding-right:3rem;}
+.pw-toggle{position:absolute;right:.9rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1.1rem;}
+.input-icon{position:relative;}
+.input-icon .form-input{padding-left:2.75rem;}
+.input-icon .icon{position:absolute;left:.9rem;top:50%;transform:translateY(-50%);font-size:1rem;color:var(--text-muted);}
+.forgot{display:block;text-align:right;font-size:.82rem;color:var(--gold);margin-top:.4rem;cursor:pointer;}
+.auth-footer{text-align:center;font-size:.88rem;color:var(--text-muted);margin-top:1.5rem;}
+.auth-footer a{color:var(--gold);}
+.quote-box{background:rgba(201,168,76,.06);border-left:3px solid var(--gold);padding:1rem 1.25rem;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin-bottom:2rem;font-size:.88rem;font-style:italic;color:var(--text-light);max-width:420px;}
+
+/* Reset panel */
+.reset-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:1.5rem;}
+.reset-overlay.open{display:flex;}
+.reset-card{background:var(--navy-light);border:1px solid var(--border);border-radius:20px;padding:2rem;width:100%;max-width:380px;}
+.reset-card h3{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:.5rem;}
+.reset-card p{font-size:.88rem;color:var(--text-muted);margin-bottom:1.5rem;}
+</style>
+</head>
+<body>
+<div class="auth-bg"></div>
+<div class="auth-wrap">
+  <div class="auth-logo">Auto<span>1</span> Group</div>
+  <div class="auth-tagline">Premium Automotive Advertising Platform</div>
+
+  <div class="quote-box">
+    "Partnering with Auto1 to drive career development and shape the future of automotive advertising."
+  </div>
+
+  <div class="auth-card">
+    <h2 class="auth-title">Welcome Back</h2>
+    <p class="auth-sub">Sign in to continue your advertising journey.</p>
+
+    <form id="signinForm" novalidate>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <div class="input-icon">
+          <span class="icon">📧</span>
+          <input class="form-input" type="email" id="email" placeholder="your@email.com" autocomplete="email">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="pw-wrap input-icon">
+          <span class="icon">🔒</span>
+          <input class="form-input" type="password" id="password" placeholder="Your password" autocomplete="current-password">
+          <button type="button" class="pw-toggle" onclick="togglePw()">👁</button>
+        </div>
+        <span class="forgot" onclick="document.getElementById('resetOverlay').classList.add('open')">Forgot password?</span>
+      </div>
+
+      <button type="submit" class="btn-gold" style="width:100%;margin-top:.5rem;" id="submitBtn">Sign In →</button>
+    </form>
+
+    <div class="auth-footer">
+      Don't have an account? <a href="signup.html">Sign Up</a>
+    </div>
+  </div>
+</div>
+
+<!-- Reset Password Modal -->
+<div class="reset-overlay" id="resetOverlay">
+  <div class="reset-card">
+    <h3>Reset Password</h3>
+    <p>Enter your email and we'll send you a reset link.</p>
+    <div class="form-group">
+      <label class="form-label">Email Address</label>
+      <input class="form-input" type="email" id="resetEmail" placeholder="your@email.com">
+    </div>
+    <div style="display:flex;gap:.75rem;margin-top:.5rem;">
+      <button class="btn-gold" style="flex:1;" onclick="sendReset()">Send Reset Link</button>
+      <button class="btn-outline" style="flex:1;" onclick="document.getElementById('resetOverlay').classList.remove('open')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+function togglePw() {
+  const inp = document.getElementById('password');
+  const btn = document.querySelector('.pw-toggle');
+  if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}
+  else{inp.type='password';btn.textContent='👁';}
+}
+
+function sendReset(){
+  const email = document.getElementById('resetEmail').value.trim();
+  if(!email){ showToast('Please enter your email.'); return; }
+  showToast('Reset link sent! Check your inbox.');
+  document.getElementById('resetOverlay').classList.remove('open');
+}
+
+document.getElementById('signinForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  if(!email||!password){ showToast('Please fill in all fields.'); return; }
+
+  const btn = document.getElementById('submitBtn');
+  btn.textContent='Signing In...'; btn.disabled=true;
+
+  setTimeout(()=>{
+    const user = Store.get('a1g_user');
+    if(user && user.email===email){
+      showToast('Welcome back, '+user.username+'! 🚗');
+      setTimeout(()=>{ window.location.href='home.html'; },800);
+    } else {
+      showToast('Invalid email or password. Please try again.');
+      btn.textContent='Sign In →'; btn.disabled=false;
+    }
+  },1000);
+});
+
+// redirect if already logged in
+if(getUser()) window.location.href='home.html';
+</script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auto1 Group — Premium Automotive Advertising Platform</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;padding-top:80px;}
+.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1600&q=80') center/cover no-repeat;opacity:.18;}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(10,22,40,.97) 0%,rgba(10,22,40,.7) 100%);}
+.hero-content{position:relative;z-index:1;padding:4rem 2rem;max-width:780px;margin:0 auto;text-align:center;}
+.hero-tag{display:inline-block;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.35);color:var(--gold);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;padding:.4rem 1.1rem;border-radius:50px;margin-bottom:1.75rem;}
+.hero h1{font-size:clamp(2.5rem,7vw,5rem);font-weight:900;line-height:1.05;letter-spacing:-.02em;margin-bottom:1.5rem;}
+.hero h1 em{font-style:normal;color:var(--gold);}
+.hero p{font-size:1.1rem;color:var(--text-light);max-width:550px;margin:0 auto 2.5rem;line-height:1.75;}
+.hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+.hero-stats{position:relative;z-index:1;display:flex;justify-content:center;gap:3rem;padding:2.5rem 2rem;flex-wrap:wrap;}
+.hero-stat{text-align:center;}
+.hero-stat-num{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:var(--gold);}
+.hero-stat-label{font-size:.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-top:.3rem;}
+
+.ticker{background:rgba(201,168,76,.08);border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;padding:.7rem 0;}
+.ticker-inner{display:flex;gap:3rem;white-space:nowrap;animation:tick 35s linear infinite;font-size:.82rem;color:var(--text-muted);letter-spacing:.06em;}
+.ticker-inner span::before{content:'✦';margin-right:1.5rem;color:var(--gold);opacity:.7;}
+@keyframes tick{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+.section{padding:5rem 1.5rem;}
+.section-header{text-align:center;margin-bottom:3rem;}
+.section-header h2{font-size:clamp(1.9rem,4vw,2.8rem);font-weight:700;margin-bottom:.75rem;}
+.section-header p{color:var(--text-muted);font-size:1rem;max-width:500px;margin:0 auto;}
+
+.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;max-width:900px;margin:0 auto;}
+.how-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:2rem 1.5rem;text-align:center;transition:border-color .3s,transform .3s;}
+.how-card:hover{border-color:var(--gold);transform:translateY(-4px);}
+.how-num{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:1.3rem;color:var(--navy);margin:0 auto 1.25rem;}
+.how-card h3{font-size:1.1rem;margin-bottom:.6rem;}
+.how-card p{font-size:.88rem;color:var(--text-muted);line-height:1.65;}
+
+.cars-scroll{display:flex;gap:1.25rem;overflow-x:auto;padding:0 1.5rem 1rem;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.cars-scroll::-webkit-scrollbar{display:none;}
+.car-card{flex-shrink:0;width:260px;background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:transform .3s;}
+.car-card:hover{transform:translateY(-4px);}
+.car-card img{width:100%;height:160px;object-fit:cover;display:block;}
+.car-card-body{padding:1rem 1.1rem;}
+.car-card-cat{font-size:.72rem;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem;}
+.car-card-name{font-size:1rem;font-weight:600;margin-bottom:.4rem;}
+.car-card-price{font-size:.85rem;color:var(--text-muted);}
+.car-card-rating{font-size:.8rem;color:var(--gold-light);margin-top:.3rem;}
+
+.cta-section{margin:0 1.5rem 5rem;background:linear-gradient(135deg,var(--navy-mid),#0d2a52);border:1px solid var(--border);border-radius:1.5rem;padding:4rem 2rem;text-align:center;}
+.cta-section h2{font-size:clamp(1.8rem,4vw,2.6rem);margin-bottom:1rem;}
+.cta-section p{color:var(--text-muted);max-width:450px;margin:0 auto 2rem;line-height:1.7;}
+
+footer{background:var(--navy-light);border-top:1px solid var(--border);padding:2.5rem 1.5rem;text-align:center;}
+.footer-logo{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;margin-bottom:.5rem;}
+.footer-logo span{color:var(--gold);}
+.footer-links{display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;margin:1rem 0;font-size:.85rem;color:var(--text-muted);}
+.footer-links a:hover{color:var(--gold);}
+.footer-copy{font-size:.8rem;color:var(--text-muted);}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-logo">Auto<span>1</span> Group</div>
+  <div class="nav-links" id="navLinks">
+    <a href="#how">How It Works</a>
+    <a href="#cars">Cars</a>
+    <a href="signin.html">Sign In</a>
+  </div>
+  <div class="nav-actions">
+    <a href="signup.html" class="btn-gold" style="padding:.6rem 1.4rem;font-size:.88rem;">Get Started</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div style="width:100%;">
+    <div class="hero-content">
+      <span class="hero-tag">Europe's #1 Automotive Advertising Platform</span>
+      <h1>Promote <em>Premium</em> Cars.<br>Earn Real Rewards.</h1>
+      <p>Join thousands of automotive advertising partners. Promote luxury vehicles, build your network, and earn commissions — all from one powerful platform.</p>
+      <div class="hero-actions">
+        <a href="signup.html" class="btn-gold">Start Promoting →</a>
+        <a href="signin.html" class="btn-outline">Sign In</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-num">60K+</div><div class="hero-stat-label">Partner Dealers</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">40+</div><div class="hero-stat-label">Premium Cars</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">30+</div><div class="hero-stat-label">Countries</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">$2M+</div><div class="hero-stat-label">Commissions Paid</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker">
+  <div class="ticker-inner" id="ticker"></div>
+</div>
+
+<section class="section" id="how">
+  <div class="section-header">
+    <p class="section-label">How It Works</p>
+    <div class="gold-line" style="margin:0 auto .75rem;"></div>
+    <h2>Simple. Powerful. Rewarding.</h2>
+    <p>Start earning in minutes with our straightforward automotive promotion system.</p>
+  </div>
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-num">1</div>
+      <h3>Create Account</h3>
+      <p>Sign up with your referral code. Get instant access to 40+ premium car listings to promote.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-num">2</div>
+      <h3>Fund Your Wallet</h3>
+      <p>Deposit funds to activate your advertising campaigns and start matching vehicles.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-num">3</div>
+      <h3>Promote Cars</h3>
+      <p>Use the MATCH system to promote premium vehicles daily and earn commissions on each match.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-num">4</div>
+      <h3>Earn & Withdraw</h3>
+      <p>Collect your commissions and referral bonuses. Withdraw directly to your preferred payment method.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="cars" style="padding-top:0;">
+  <div class="section-header">
+    <p class="section-label">Featured Vehicles</p>
+    <div class="gold-line" style="margin:0 auto .75rem;"></div>
+    <h2>Premium Car Inventory</h2>
+    <p>Promote the world's most desirable vehicles and earn top commissions.</p>
+  </div>
+  <div class="cars-scroll" id="carsScroll"></div>
+  <div style="text-align:center;margin-top:2rem;">
+    <a href="signup.html" class="btn-gold">Join To Promote All 40 Cars →</a>
+  </div>
+</section>
+
+<div class="cta-section">
+  <div class="section-label" style="margin-bottom:.5rem;">Ready to Start?</div>
+  <div class="gold-line" style="margin:.4rem auto 1.25rem;"></div>
+  <h2>Build Your Automotive Empire</h2>
+  <p>Join Auto1 Group today and start earning commissions by promoting premium vehicles to our global dealer network.</p>
+  <a href="signup.html" class="btn-gold">Create Free Account →</a>
+</div>
+
+<footer>
+  <div class="footer-logo">Auto<span>1</span> Group</div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="#">FAQs</a>
+    <a href="#">Terms</a>
+    <a href="#">Privacy</a>
+    <a href="#">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 Auto1 Group. All rights reserved. | Partnering with AUTO1 to drive career development.</div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+// Ticker
+const tickerItems = ['Premium Car Promotions','Earn Daily Commissions','20% Referral Bonus','40+ Luxury Vehicles','Instant Withdrawals','Global Dealer Network','Transparent Earnings','24/7 Platform Access'];
+const t = document.getElementById('ticker');
+const doubled = [...tickerItems,...tickerItems];
+t.innerHTML = doubled.map(i=>`<span>${i}</span>`).join('');
+
+// Cars scroll
+const cs = document.getElementById('carsScroll');
+CARS.slice(0,12).forEach(c=>{
+  cs.innerHTML += `<div class="car-card">
+    <img src="${c.img}" alt="${c.name}" loading="lazy">
+    <div class="car-card-body">
+      <div class="car-card-cat">${c.cat}</div>
+      <div class="car-card-name">${c.name}</div>
+      <div class="car-card-price">${c.price}</div>
+      <div class="car-card-rating">${'★'.repeat(Math.floor(c.rating))} ${c.rating}</div>
+    </div>
+  </div>`;
+});
+
+// Nav active state
+const user = getUser();
+if(user){
+  document.querySelector('.nav-actions').innerHTML = `<a href="home.html" class="btn-gold" style="padding:.6rem 1.4rem;font-size:.88rem;">Dashboard →</a>`;
+}
+</script>
+</body>
+</html>

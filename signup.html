@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up — Auto1 Group</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.auth-wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.25rem;}
+.auth-bg{position:fixed;inset:0;background:url('https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=1400&q=70') center/cover no-repeat;opacity:.07;z-index:-1;}
+.auth-logo{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;margin-bottom:.5rem;text-align:center;}
+.auth-logo span{color:var(--gold);}
+.auth-tagline{font-size:.82rem;color:var(--text-muted);text-align:center;margin-bottom:2rem;}
+.auth-card{width:100%;max-width:420px;background:rgba(17,34,64,.98);border:1px solid var(--border);border-radius:20px;padding:2.25rem 2rem;}
+.auth-title{font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:.4rem;}
+.auth-sub{font-size:.88rem;color:var(--text-muted);margin-bottom:1.75rem;}
+.pw-wrap{position:relative;}
+.pw-wrap .form-input{padding-right:3rem;}
+.pw-toggle{position:absolute;right:.9rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1.1rem;}
+.input-icon{position:relative;}
+.input-icon .form-input{padding-left:2.75rem;}
+.input-icon .icon{position:absolute;left:.9rem;top:50%;transform:translateY(-50%);font-size:1rem;color:var(--text-muted);}
+.auth-footer{text-align:center;font-size:.88rem;color:var(--text-muted);margin-top:1.5rem;}
+.auth-footer a{color:var(--gold);}
+.ref-note{font-size:.78rem;color:var(--text-muted);margin-top:.4rem;}
+.divider-text{display:flex;align-items:center;gap:.75rem;margin:1.25rem 0;color:var(--text-muted);font-size:.82rem;}
+.divider-text::before,.divider-text::after{content:'';flex:1;height:1px;background:var(--border);}
+.terms-check{display:flex;align-items:flex-start;gap:.65rem;margin-bottom:1.25rem;}
+.terms-check input{margin-top:.2rem;accent-color:var(--gold);}
+.terms-check label{font-size:.83rem;color:var(--text-muted);line-height:1.5;}
+.terms-check a{color:var(--gold);}
+.strength-bar{height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:.4rem;overflow:hidden;}
+.strength-fill{height:100%;border-radius:2px;transition:width .3s,background .3s;}
+.error-msg{font-size:.78rem;color:var(--danger);margin-top:.35rem;display:none;}
+.field-error .form-input{border-color:var(--danger);}
+.field-error .error-msg{display:block;}
+</style>
+</head>
+<body>
+<div class="auth-bg"></div>
+<div class="auth-wrap">
+  <div class="auth-logo">Auto<span>1</span> Group</div>
+  <div class="auth-tagline">Premium Automotive Advertising Platform</div>
+
+  <div class="auth-card">
+    <h2 class="auth-title">Create Account</h2>
+    <p class="auth-sub">Join our global network of automotive advertising partners.</p>
+
+    <form id="signupForm" novalidate>
+      <div class="form-group" id="fg-username">
+        <label class="form-label">Username</label>
+        <div class="input-icon">
+          <span class="icon">👤</span>
+          <input class="form-input" type="text" id="username" placeholder="Choose a username" autocomplete="username">
+        </div>
+        <div class="error-msg" id="err-username">Please enter a username (min 3 characters).</div>
+      </div>
+
+      <div class="form-group" id="fg-email">
+        <label class="form-label">Email Address</label>
+        <div class="input-icon">
+          <span class="icon">📧</span>
+          <input class="form-input" type="email" id="email" placeholder="your@email.com" autocomplete="email">
+        </div>
+        <div class="error-msg" id="err-email">Please enter a valid email address.</div>
+      </div>
+
+      <div class="form-group" id="fg-password">
+        <label class="form-label">Password</label>
+        <div class="pw-wrap input-icon">
+          <span class="icon">🔒</span>
+          <input class="form-input" type="password" id="password" placeholder="Create a strong password" autocomplete="new-password">
+          <button type="button" class="pw-toggle" onclick="togglePw('password',this)">👁</button>
+        </div>
+        <div class="strength-bar"><div class="strength-fill" id="strengthBar" style="width:0%"></div></div>
+        <div class="error-msg" id="err-password">Password must be at least 8 characters.</div>
+      </div>
+
+      <div class="form-group" id="fg-confirm">
+        <label class="form-label">Confirm Password</label>
+        <div class="pw-wrap input-icon">
+          <span class="icon">🔒</span>
+          <input class="form-input" type="password" id="confirm" placeholder="Repeat your password" autocomplete="new-password">
+          <button type="button" class="pw-toggle" onclick="togglePw('confirm',this)">👁</button>
+        </div>
+        <div class="error-msg" id="err-confirm">Passwords do not match.</div>
+      </div>
+
+      <div class="form-group" id="fg-referral">
+        <label class="form-label">Referral Code <span style="color:var(--text-muted);font-size:.75rem;">(optional)</span></label>
+        <div class="input-icon">
+          <span class="icon">🎁</span>
+          <input class="form-input" type="text" id="referral" placeholder="Enter referral code e.g. A1-XYZ123" style="text-transform:uppercase;" autocomplete="off">
+        </div>
+        <div class="ref-note">Have a referral code? Enter it to earn a bonus on sign-up.</div>
+        <div class="error-msg" id="err-referral">Invalid referral code format.</div>
+      </div>
+
+      <div class="terms-check">
+        <input type="checkbox" id="terms">
+        <label for="terms">I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a>.</label>
+      </div>
+
+      <button type="submit" class="btn-gold" style="width:100%;margin-top:.5rem;" id="submitBtn">Create Account →</button>
+    </form>
+
+    <div class="auth-footer">
+      Already have an account? <a href="signin.html">Sign In</a>
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+function togglePw(id, btn) {
+  const inp = document.getElementById(id);
+  if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '🙈'; }
+  else { inp.type = 'password'; btn.textContent = '👁'; }
+}
+
+document.getElementById('password').addEventListener('input', function() {
+  const v = this.value; let score = 0;
+  if (v.length >= 8) score++;
+  if (/[A-Z]/.test(v)) score++;
+  if (/[0-9]/.test(v)) score++;
+  if (/[^A-Za-z0-9]/.test(v)) score++;
+  const bar = document.getElementById('strengthBar');
+  const colors = ['#e74c3c','#e67e22','#f1c40f','#2ecc71'];
+  bar.style.width = (score * 25) + '%';
+  bar.style.background = colors[score-1] || '#e74c3c';
+});
+
+document.getElementById('referral').addEventListener('input', function(){
+  this.value = this.value.toUpperCase();
+});
+
+function setError(fg, err, show) {
+  document.getElementById('fg-'+fg).classList.toggle('field-error', show);
+  document.getElementById('err-'+err).style.display = show ? 'block' : 'none';
+}
+
+document.getElementById('signupForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const username = document.getElementById('username').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const confirm = document.getElementById('confirm').value;
+  const referral = document.getElementById('referral').value.trim();
+  const terms = document.getElementById('terms').checked;
+  let valid = true;
+
+  setError('username','username', username.length < 3); if(username.length < 3) valid=false;
+  setError('email','email', !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)); if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) valid=false;
+  setError('password','password', password.length < 8); if(password.length < 8) valid=false;
+  setError('confirm','confirm', password !== confirm); if(password !== confirm) valid=false;
+  if(referral && !/^A1-[A-Z0-9]{6}$/.test(referral)) { setError('referral','referral',true); valid=false; } else setError('referral','referral',false);
+
+  if(!terms){ showToast('Please agree to the Terms & Conditions.'); return; }
+  if(!valid) return;
+
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Creating Account...'; btn.disabled = true;
+
+  setTimeout(()=>{
+    const myCode = genReferral();
+    const user = { username, email, referral: myCode, referredBy: referral||null, wallet:0, commission:0, earnings:0, matchCount:0, round:1, joined: new Date().toISOString() };
+    Store.set('a1g_user', user);
+    showToast('Account created! Welcome to Auto1 Group 🎉');
+    setTimeout(()=>{ window.location.href='home.html'; }, 1000);
+  }, 1200);
+});
+</script>
+</body>
+</html>
