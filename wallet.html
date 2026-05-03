@@ -182,6 +182,10 @@ function loadWallet(){
   document.getElementById('commAmount').textContent = formatMoney(u.commission||0);
   document.getElementById('earnAmount').textContent = formatMoney(u.earnings||0);
 
+  // Welcome bonus display - separate from wallet
+  const bonus = u.welcomeBonus || WELCOME_BONUS;
+  document.getElementById('bonusAmount').textContent = formatMoney(bonus);
+
   // Match progress
   const matched = u.matchCount || 0;
   const pct = Math.round((matched / 40) * 100);

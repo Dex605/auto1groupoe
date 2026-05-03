@@ -301,9 +301,9 @@ function loadUser(){
   document.getElementById('profileName').textContent = u.username;
   document.getElementById('profileEmail').textContent = u.email;
   document.getElementById('profileRefCode').textContent = u.referral;
-  document.getElementById('walletVal').textContent = formatMoney(u.wallet);
-  document.getElementById('commVal').textContent = formatMoney(u.commission);
-  document.getElementById('earnVal').textContent = formatMoney(u.earnings);
+  document.getElementById('walletVal').textContent = formatMoney(u.wallet||0);
+  document.getElementById('commVal').textContent = formatMoney(u.commission||0);
+  document.getElementById('earnVal').textContent = formatMoney(u.earnings||0);
   document.getElementById('pendVal').textContent = formatMoney(u.pending||0);
   document.getElementById('roundVal').textContent = (u.round||1) + ' of 3';
   matchCount = u.matchCount || 0;
